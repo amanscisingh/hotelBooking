@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const mongoose =  require("mongoose");
-const path = require("path");
 const dotenv = require("dotenv");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
@@ -23,9 +22,11 @@ mongoose.connect(MONGODB_URI, {
 app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
 app.set("view engine", ".hbs");
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname + "/public/"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/', require('./routes/home'));
+app.use('/api', require('./routes/api'));
+app.use('/admin', require('./routes/admin'));

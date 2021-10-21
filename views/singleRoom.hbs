@@ -1,0 +1,172 @@
+    <!-- Breadcrumb Section Begin -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <h2>Our Rooms</h2>
+                        <div class="bt-option">
+                            <a href="/">Home</a>
+                            <span>Rooms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Room Details Section Begin -->
+    <section class="room-details-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="room-details-item">
+                        <img src="img/room/room-details.jpg" alt="">
+                        <div class="rd-text">
+                            <div class="rd-title">
+                                <h3>{{room.name}}</h3>
+                                <div class="rdt-right">
+                                    <div class="rating">
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star-half_alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2>{{room.price}}₹<span>/Pernight</span></h2>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="r-o">Size:</td>
+                                        <td>30 ft</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Capacity:</td>
+                                        <td>Max persion 5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Bed:</td>
+                                        <td>King Beds</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Services:</td>
+                                        <td>AC, Wifi, Geyser, Mini Kitchen, Parking, Restaurant</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="f-para">Motorhome or Trailer that is the question for you. Here are some of the
+                                advantages and disadvantages of both, so you will be confident when purchasing an RV.
+                                When comparing Rvs, a motorhome or a travel trailer, should you buy a motorhome or fifth
+                                wheeler? The advantages and disadvantages of both are studied so that you can make your
+                                choice wisely when purchasing an RV. Possessing a motorhome or fifth wheel is an
+                                achievement of a lifetime. It can be similar to sojourning with your residence as you
+                                search the various sites of our great land, America.</p>
+                            <p>The two commonly known recreational vehicle classes are the motorized and towable.
+                                Towable rvs are the travel trailers and the fifth wheel. The rv travel trailer or fifth
+                                wheel has the attraction of getting towed by a pickup or a car, thus giving the
+                                adaptability of possessing transportation for you when you are parked at your campsite.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-lg-4">
+                    <div class="room-booking" id="roomBooking">
+                        <h3>Your Reservation</h3>
+                        <form action="#" id="checkAvailbityForm">
+                            <div class="check-date">
+                                <label for="date-in">Check In:</label>
+                                <input type="date" required name="checkInDate" id="checkInDate">
+                                
+                            </div>
+                            <div class="form-group">
+                                
+                            </div>
+                            <div class="check-date">
+                                <label for="date-out">Check Out:</label>
+                                <input type="date" required name="checkOutDate" id="checkOutDate">
+                                
+                            </div>
+                            <div class="select-option">
+                                <label for="guest">Guests:</label>
+                                <select name="adultNo" required id="guest">
+                                    <option value="1">1 Adults</option>
+                                    <option value="2">2 Adults</option>
+                                    <option value="3">3 Adults</option>
+                                </select>
+                            </div>
+                            <div class="select-option">
+                                <label for="room">Room:</label>
+                                <select name="roomNo" required id="room">
+                                    <option value="1">1 Room</option>
+                                    <option value="2">2 Room</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Room Details Section End -->
+
+
+    {{!-- script begins here --}}
+    <script>
+        const checkAvailbityForm = document.getElementById('checkAvailbityForm');
+        const roomBooking = document.getElementById('roomBooking');
+
+        checkAvailbityForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const checkInDate = document.getElementById('checkInDate').value;
+            const checkOutDate = document.getElementById('checkOutDate').value;
+            const adultNo = document.getElementById('guest').value;
+            const roomNo = document.getElementById('room').value;
+            const roomId = '{{room._id}}';
+
+            const url = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.message === 'Room is available') {
+                        let userDetailDiv = document.createElement('div');
+                        userDetailDiv.classList.add('form-group');
+                        userDetailDiv.innerHTML = `
+                            <div class="col-lg-12 m-3">
+                                <input required class="form-control" type="text" name="userName" id="userName" placeholder="Name*">
+                            </div>
+                            <div class="col-lg-12 m-3">
+                                <input required class="form-control" type="text" name="email" id="email" placeholder="Email*">
+                            </div>
+                            <div class="col-lg-12 m-3">
+                                <input required class="form-control" type="text" name="mobile" id="mobile" placeholder="Mobile No.*">
+                            </div>
+                        `;
+
+                        let bookBtn = document.createElement('a');
+                        bookBtn.innerText = 'Book Now';
+
+                        checkAvailbityForm.appendChild(userDetailDiv);
+                        checkAvailbityForm.appendChild(bookBtn);
+                        document.getElementById('checkAvailabilityBtn').remove();
+                        // bookBtn.setAttribute('type', 'submit');
+                        bookBtn.addEventListener('click', () => {
+                            window.location.href = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}`;
+                        });
+                        alert('Room is available');
+                    } else {
+                        alert('Room is Not Available. \nPlease Check for another Date.');
+                    }
+                })
+                .catch(err => console.log(err));
+        });
+
+    </script>
+    {{!-- script ends here --}}
