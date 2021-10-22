@@ -5,6 +5,12 @@ const path = require("path");
 const dotenv = require("dotenv");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const RazorPay = require("razorpay");
+
+const razorpay = new RazorPay({
+    key_id: "rzp_test_25WThwSFtdt8wf",
+    key_secret: "L3Zq82uskZJJ3thFvBxB4DVL"
+});
 
 dotenv.config({ path: "./config/.env" });
 
