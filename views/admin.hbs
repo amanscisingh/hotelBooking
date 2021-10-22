@@ -1,0 +1,62 @@
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Profile Datatable</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="example3" class="display" style="min-width: 845px">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Mob No.</th>
+                            <th>Adults</th>
+                            <th>Children</th>
+                            <th>CheckIn</th>
+                            <th>CheckOut</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each allBookings}}                       
+                            <tr>
+                                <td>{{@key}}</td>
+                                <td>{{this.userName}}</td>
+                                <td>{{this.email}}</td>
+                                <td>{{this.mobile}}</td>
+                                <td>{{this.adults}}</td>
+                                <td>{{this.children}}</td>
+                                <td>{{this.checkIn}}</td>
+                                <td>{{this.checkOut}}</td>
+                                <td>{{this.status}}</td>
+                                <td>
+                                    <a href="/api/deleteBooking/{{this._id}}" style="cursor:pointer;">
+                                        Delete
+                                    </a>
+                                    <br>
+                                    <a href="/api/cancleBooking/{{this._id}}" style="cursor:pointer;">
+                                        Cancle Booking
+                                    </a>
+                                    <br>
+                                    <a href="/api/markCheckIn/{{this._id}}" style="cursor:pointer;">
+                                        Check In
+                                    </a>
+                                    <br>
+                                    <a href="/api/markCheckOut/{{this._id}}" style="cursor:pointer;">
+                                        Check Out
+                                    </a>
+                                    
+                                </td>
+                            </tr>
+            
+                            
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
