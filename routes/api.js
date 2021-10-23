@@ -443,7 +443,8 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 userName: booking.userName,
                 email: booking.email,
                 mobile: booking.mobile,
-                status: booking.status
+                status: booking.status,
+                noOfRooms: booking.noOfRooms,
             });
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);
@@ -453,10 +454,11 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 data: deletedBooking
             });
         } else {
-            res.status(200).json({
-                message: 'Booking not found',
-                data: booking
-            });
+            // res.status(200).json({
+            //     message: 'Booking not found',
+            //     data: booking
+            // });
+            res.redirect('/admin');
         }
     } catch (error) {
         console.log(error);
@@ -475,10 +477,11 @@ apiRoute.get('/cancleBooking/:id', async (req, res) => {
                 data: savedBooking
             });
         } else {
-            res.status(200).json({
-                message: 'Booking not found',
-                data: booking
-            });
+            // res.status(200).json({
+            //     message: 'Booking not found',
+            //     data: booking
+            // });
+            res.redirect('/admin');
         }
 
     } catch (error) {
@@ -498,10 +501,11 @@ apiRoute.get('/markCheckIn/:id', async (req, res) => {
                 data: savedBooking
             });
         } else {
-            res.status(200).json({
-                message: 'Booking not found',
-                data: booking
-            });
+            // res.status(200).json({
+            //     message: 'Booking not found',
+            //     data: booking
+            // });
+            res.redirect('/admin');
         }
 
     } catch (error) {
@@ -521,10 +525,11 @@ apiRoute.get('/markCheckOut/:id', async (req, res) => {
                 data: savedBooking
             });
         } else {
-            res.status(200).json({
-                message: 'Booking not found',
-                data: booking
-            });
+            // res.status(200).json({
+            //     message: 'Booking not found',
+            //     data: booking
+            // });
+            res.redirect('/admin');
         }
 
     } catch (error) {
