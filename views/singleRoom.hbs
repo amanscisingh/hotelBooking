@@ -152,13 +152,71 @@
 
                         let bookBtn = document.createElement('a');
                         bookBtn.innerText = 'Book Now';
+                        bookBtn.classList.add('btn', 'btn-warning');
 
                         checkAvailbityForm.appendChild(userDetailDiv);
                         checkAvailbityForm.appendChild(bookBtn);
                         document.getElementById('checkAvailabilityBtn').remove();
-                        // bookBtn.setAttribute('type', 'submit');
+                        bookBtn.setAttribute('type', 'button');
                         bookBtn.addEventListener('click', () => {
-                            window.location.href = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}`;
+                            let bookingId; let userName; let noOfRooms;
+                            let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}`;
+                            fetch(bookingUrl, {
+                                method: 'POST'
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    console.log(data);
+                                    bookingId = data.data._id;
+                                    userName = data.data.userName;
+                                    noOfRooms = data.data.noOfRooms;
+                                    if (data.message === 'Booking added successfully') {
+                                        
+                                        let divEle = document.createElement('div');
+                                        divEle.innerHTML = `
+                                            <h3>Your Reservation</h3>
+                                            <p>Your booking is successful. You will receive a confirmation email shortly.</p>
+                                        `;
+                                        roomBooking.append(divEle);
+                                    }
+                                })
+                                .catch(err => console.log(err));
+
+                            fetch('/api/order', {
+                                method : 'POST',
+                            })
+                            .then(res => res.json())
+                            .then(info =>{
+                                console.log(info);
+                                console.log(bookingId);
+                                var options = {
+                                    "key": "rzp_test_25WThwSFtdt8wf", // Enter the Key ID generated from the Dashboard
+                                    "name": "Acme Corp",
+                                    "description": "Test Transaction",
+                                    "image": "https://example.com/your_logo",
+                                    "order_id": info.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                    "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}`,
+                                    "prefill": {
+                                        "name": document.getElementById('userName').value,
+                                        "email": document.getElementById('email').value,
+                                        "contact": document.getElementById('mobile').value
+                                    },
+                                    "notes": {
+                                        "address": "Razorpay Corporate Office"
+                                    },
+                                    "theme": {
+                                        "color": "#3399cc"
+                                    }
+                                };
+                                var rzp1 = new Razorpay(options);
+                                const initiateRazorpay = function(e){
+                                    console.log('funnnnnnnnnnn');
+                                    rzp1.open();
+                                    e.preventDefault();
+                                };
+                                initiateRazorpay();
+
+                            })
                         });
                         alert('Room is available');
                     } else {
@@ -167,6 +225,8 @@
                 })
                 .catch(err => console.log(err));
         });
+        
+
 
     </script>
     {{!-- script ends here --}}

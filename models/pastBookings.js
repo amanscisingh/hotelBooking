@@ -35,6 +35,10 @@ const pastBookingsSchema = new mongoose.Schema({
         ref: 'Rooms',
         required: true
     },
+    noOfRooms: {
+        type: Number,
+        required: true
+    },
     status: { // booked, cancelled, checkedIn, checkedOut, partialBooked
         type: String,
         required: true

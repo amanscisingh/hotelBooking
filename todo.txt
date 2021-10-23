@@ -1,0 +1,8 @@
+=> booking+payment+email after successful payment...
+
+1. check checkAvailableRooms function ...DONE
+2. admin backend 
+3. designing
+4. purchasing
+5. hiding apikeys
+6. 
