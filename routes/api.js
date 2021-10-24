@@ -449,16 +449,16 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);
             const deletedBooking = await Bookings.findByIdAndDelete(bookingId);
-            res.status(200).json({
-                message: 'Booking deleted successfully',
-                data: deletedBooking
-            });
-        } else {
-            // res.status(200).json({
-            //     message: 'Booking not found',
-            //     data: booking
-            // });
             res.redirect('/admin');
+            // res.status(200).json({
+            //     message: 'Booking deleted successfully',
+            //     data: deletedBooking
+            // });
+        } else {
+            res.status(200).json({
+                message: 'Booking not found',
+                data: booking
+            });
         }
     } catch (error) {
         console.log(error);
@@ -472,16 +472,16 @@ apiRoute.get('/cancleBooking/:id', async (req, res) => {
         if (booking) {
             booking.status = 'cancelled';
             const savedBooking = await booking.save();
-            res.status(200).json({
-                message: 'Booking cancelled successfully',
-                data: savedBooking
-            });
-        } else {
-            // res.status(200).json({
-            //     message: 'Booking not found',
-            //     data: booking
-            // });
             res.redirect('/admin');
+            // res.status(200).json({
+            //     message: 'Booking cancelled successfully',
+            //     data: savedBooking
+            // });
+        } else {
+            res.status(200).json({
+                message: 'Booking not found',
+                data: booking
+            });
         }
 
     } catch (error) {
@@ -496,16 +496,16 @@ apiRoute.get('/markCheckIn/:id', async (req, res) => {
         if (booking) {
             booking.status = 'checkedIn';
             const savedBooking = await booking.save();
-            res.status(200).json({
-                message: 'Booking checked in successfully',
-                data: savedBooking
-            });
-        } else {
-            // res.status(200).json({
-            //     message: 'Booking not found',
-            //     data: booking
-            // });
             res.redirect('/admin');
+            // res.status(200).json({
+            //     message: 'Booking checked in successfully',
+            //     data: savedBooking
+            // });
+        } else {
+            res.status(200).json({
+                message: 'Booking not found',
+                data: booking
+            });
         }
 
     } catch (error) {
@@ -520,16 +520,16 @@ apiRoute.get('/markCheckOut/:id', async (req, res) => {
         if (booking) {
             booking.status = 'checkOut';
             const savedBooking = await booking.save();
-            res.status(200).json({
-                message: 'Booking checked out successfully',
-                data: savedBooking
-            });
-        } else {
-            // res.status(200).json({
-            //     message: 'Booking not found',
-            //     data: booking
-            // });
             res.redirect('/admin');
+            // res.status(200).json({
+            //     message: 'Booking checked out successfully',
+            //     data: savedBooking
+            // });
+        } else {
+            res.status(200).json({
+                message: 'Booking not found',
+                data: booking
+            });
         }
 
     } catch (error) {

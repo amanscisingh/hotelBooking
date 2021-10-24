@@ -41,4 +41,30 @@ homeRoute.post('/rooms', async (req, res)=> {
     }
 });
 
+
+homeRoute.get('/about', (req, res) => {
+    try {
+        res.render('about');
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+homeRoute.get('/contact', (req, res) => {
+    try {
+        res.render('contact');
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+homeRoute.get('/gallery', (req, res) => {
+    try {
+        res.render('gallery');
+    } catch (error) {
+        console.log(error);
+    }
+})
 module.exports = homeRoute;

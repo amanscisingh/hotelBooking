@@ -685,16 +685,21 @@ ul, ol {
 	transition: all 0.3s;
 }
 .service-item:hover {
-	background: #dfa974;
+	background: #fff4e9;
 }
 .service-item:hover i {
-	color: #ffffff;
+	color: #000000;
 }
 .service-item:hover h4 {
-	color: #ffffff;
+	color: #000000;
 }
 .service-item:hover p {
-	color: #ffffff;
+	color: #000000;
+}
+
+.hp-room-section{
+	padding-bottom: 60px;
+    border-top: 1px solid #e5e5e5;
 }
 .service-item i {
 	display: inline-block;
@@ -2335,3 +2340,6 @@ ul, ol {
 		margin-bottom: 10px;
 	}
 }
+
+
+

@@ -72,3 +72,17 @@
         </div>
     </section>
     <!-- Rooms Section End -->
+
+    <script>
+        let linksMobile = document.querySelectorAll(".linksMobile");
+        for(let i = 0; i < linksMobile.length; i++){
+            console.log(linksMobile[i]);
+            linksMobile[1].classList.add("active");
+            linksMobile[i].addEventListener("click", function(){
+                let links = document.querySelectorAll(".links");
+                for(let i = 0; i < links.length; i++){
+                    links[i].classList.remove("active");
+                }
+            });
+        }
+    </script>
