@@ -17,10 +17,14 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    price: {
+    actualPrice: {
         type: Number,
         required: true
-    }
+    },
+    sellingPrice: {
+        type: Number,
+        required: true
+    },
 }, {
     timestamps: true
 });

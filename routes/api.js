@@ -80,13 +80,17 @@ const razorpay = new RazorPay({
     key_secret: "L3Zq82uskZJJ3thFvBxB4DVL"
 });
 
-apiRoute.post('/order', async (req, res) => {
+apiRoute.post('/order/:id', async (req, res) => {
     try {
+        console.log('a.order/:id');
+        const { id } = req.params;
+        const roomData = await Rooms.findById(id).lean();
         var options = {
-            amount: 700 * 100,  // amount in the smallest currency unit  
+            amount: roomData.sellingPrice * 100,  // amount in the smallest currency unit  
             currency: "INR",  
             // receipt: "order_rcptid_11"
     };
+    console.log(options);
     
     razorpay.orders.create(options, function(err, order) {
         console.log(order);
@@ -118,24 +122,6 @@ apiRoute.post('/payments/callback', async (req, res) => {
             message: 'Payment fetched successfully',
             data: payment
         });
-        html = `
-            <h1>Booking Details</h1>
-            <li>Booking Id: ${bookingId}</li>
-            <li>Booking Status: Paid & Confirmed</li>
-            <li>Amount Paid: ${payment.amount / 100}</li>
-            <li>Name: ${name}</li>
-            <li>Email: ${payment.email}</li>
-            <li>Mobile: ${payment.contact}</li>
-            <li>Check In Date: ${checkIn}</li>
-            <li>Check Out Date: ${checkOut}</li>
-            <li>No. Of Rooms Booked: ${noOfRooms}</li>
-            <br>
-            <h2>Thank You for Booking with us</h2>
-            <br>
-            <p>Address: Ourem-Palolem Beach, 
-            Canacona, Goa | 8572081747 </p>
-            
-        `;
 
         let htmlNew = `
         <!DOCTYPE html>
@@ -381,16 +367,16 @@ apiRoute.post('/payments/callback', async (req, res) => {
             port: 465,
             secure: true, // true for 465, false for other ports
             auth: {
-            user: "office@pdcbhu.in", // generated ethereal user
-            pass: "Shivshambhu@1234", // generated ethereal password
+            user: "hotel@rosalie.in", // generated ethereal user
+            pass: "Iamrich@7", // generated ethereal password
             },
         });
     
         // send mail with defined transport object
         let info = await transporter.sendMail({
-            from: 'office@pdcbhu.in', // sender address
-            to: payment.email+ ", amanscisingh@gmail.com", // list of receivers
-            subject: "Booking Confirmed!", // Subject line
+            from: 'hotel@rosalie.in', // sender address
+            to: payment.email+ ", hotel@rosalie.in", // list of receivers
+            subject: "Booking Confirmed at Rosalie Hotel!", // Subject line
             text: "Hello world?", // plain text body
             html: htmlNew, // html body
         });
@@ -495,6 +481,7 @@ apiRoute.get('/markCheckIn/:id', async (req, res) => {
         let booking = await Bookings.findById(bookingId);
         if (booking) {
             booking.status = 'checkedIn';
+            booking.checkIn = new Date();
             const savedBooking = await booking.save();
             res.redirect('/admin');
             // res.status(200).json({
@@ -519,6 +506,7 @@ apiRoute.get('/markCheckOut/:id', async (req, res) => {
         let booking = await Bookings.findById(bookingId);
         if (booking) {
             booking.status = 'checkOut';
+            booking.checkOut = new Date();
             const savedBooking = await booking.save();
             res.redirect('/admin');
             // res.status(200).json({
