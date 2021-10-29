@@ -1,8 +1,17 @@
 => booking+payment+email after successful payment...
 
-1. check checkAvailableRooms function ...DONE
-2. admin backend 
-3. designing
-4. purchasing
-5. hiding apikeys
-6. 
+FRONT END
+1. collect images from other web sited
+2. collect descriptions from other websites
+3. put it jhere to give a final touch...
+4. after payment success...
+5. after payment failure...
+
+
+
+
+BACKEND
+1. room modification displayPrice, sellingPrice, bookingPrice
+2. 1st ask adults then adults*2 rooms
+3. email on checkIn, checkOut, bookingCancled, partiallyBooked -> contact hotel waale...
+4. 

@@ -362,30 +362,54 @@ apiRoute.post('/payments/callback', async (req, res) => {
         `;
     
         // create reusable transporter object using the default SMTP transport
+        // let transporter = nodemailer.createTransport({
+        //     host: "smtp.gmail.net",
+        //     port: 465,
+        //     secure: true, // true for 465, false for other ports
+        //     auth: {
+        //         user: "hotel@rosalie.in", // generated ethereal user
+        //         pass: "Iamrich@7", // generated ethereal password
+        //     },
+        // });
+    
+        // // send mail with defined transport object
+        // let info = await transporter.sendMail({
+        //     from: 'hotel@rosalie.in', // sender address
+        //     to: payment.email+ ", hotel@rosalie.in", // list of receivers
+        //     subject: "Booking Confirmed at Rosalie Hotel!", // Subject line
+        //     text: "Hello world?", // plain text body
+        //     html: htmlNew, // html body
+        // });
+
         let transporter = nodemailer.createTransport({
-            host: "smtpout.secureserver.net",
-            port: 465,
-            secure: true, // true for 465, false for other ports
+            service: 'gmail',
             auth: {
-            user: "hotel@rosalie.in", // generated ethereal user
-            pass: "Iamrich@7", // generated ethereal password
-            },
+                user: 'amanscisingh.hotel3@gmail.com',
+                pass:'Deepak@7'
+            }
+        })
+        
+        let mailOptions = {
+            from: 'amanscisingh.hotel3@gmail.com',
+            to: 'amanscisingh@gmail.com, aman.singh.civ19@itbhu.ac.in',
+            subject: 'Booking Confirmed at Rosalie Hotel!',
+            text: 'Greetings & Regards!',
+            html: htmlNew
+        }
+
+        transporter.sendMail(mailOptions, (err, data) => {
+            if (err) {
+                console.log('Error Occurd!', err)
+            } else {
+                console.log('email sent...')
+            }
         });
-    
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: 'hotel@rosalie.in', // sender address
-            to: payment.email+ ", hotel@rosalie.in", // list of receivers
-            subject: "Booking Confirmed at Rosalie Hotel!", // Subject line
-            text: "Hello world?", // plain text body
-            html: htmlNew, // html body
-        });
-    
-        console.log("Message sent: %s", info.messageId);
+
+        // console.log("Message sent: %s", info.messageId);
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     
         // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     });
     
 });

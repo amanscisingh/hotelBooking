@@ -16,7 +16,7 @@
                         <form action="/rooms" method="POST">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" required name="checkInDate" class="date-input" id="date-in">
+                                <input onchange="dateChanged(event)" type="text" required name="checkInDate" class="date-input" id="date-in">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
@@ -351,5 +351,11 @@
             document.getElementById('scrollToDiv').scrollIntoView({
                 behavior: 'smooth'
             });
+        }
+
+        function dateChanged(event) {
+            console.log("dateChanged");
+            var date = new Date(event.target.value);
+            console.log(date);
         }
     </script>
