@@ -22,7 +22,31 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="room-details-item">
-                        <img src="img/room/room-details.jpg" alt="">
+                        {{!-- <img src="img/room/room-details.jpg" alt=""> --}}
+
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                <img class="d-block w-100" src="img/room/r4.jpg" alt="First slide">
+                                </div>
+                                <div class="carousel-item">
+                                <img class="d-block w-100" src="img/room/r2.jpg" alt="Second slide">
+                                </div>
+                                <div class="carousel-item">
+                                <img class="d-block w-100" src="img/room/r3.jpeg" alt="Third slide">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+
                         <div class="rd-text">
                             <div class="rd-title">
                                 <h3>{{room.name}}</h3>
@@ -36,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2>{{room.actualPrice}}₹<span>/Pernight</span></h2>
+                            <h2><s>{{room.actualPrice}}</s> {{room.sellingPrice}}₹<span>/Pernight</span></h2>
                             <table>
                                 <tbody>
                                     <tr>
@@ -45,25 +69,37 @@
                                     </tr>
                                     <tr>
                                         <td class="r-o">Capacity:</td>
-                                        <td>Max persion 5</td>
+                                        <td>Max person 3 per room</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Bed:</td>
                                         <td>King Beds</td>
                                     </tr>
                                     <tr>
-                                        <td class="r-o">Services:</td>
-                                        <td>AC, Wifi, Geyser, Mini Kitchen, Parking, Restaurant</td>
+                                        <td class="r-o">Property Ammenities:</td>
+                                        <td>Wifi, Free Parking, Beach, Bar/Lounge, Children Activities, Massage</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Room Features:</td>
+                                        <td>AC, Clean Bathroom, Geyser, Housekeeping, Desk, Safe, Extra Bed, Telephone </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="f-para">Motorhome or Trailer that is the question for you. Here are some of the
-                                advantages and disadvantages of both, so you will be confident when purchasing an RV.
-                                When comparing Rvs, a motorhome or a travel trailer, should you buy a motorhome or fifth
-                                wheeler? The advantages and disadvantages of both are studied so that you can make your
-                                choice wisely when purchasing an RV. Possessing a motorhome or fifth wheel is an
-                                achievement of a lifetime. It can be similar to sojourning with your residence as you
-                                search the various sites of our great land, America.</p>
+                            <p class="f-para">Finding an ideal romantic lodge in Palolem does not have to be difficult. 
+                                Welcome to Orange Sky Inn Beach Huts, a nice option for travellers like you. 
+                            </p>
+                            <p class="f-para">
+                                Free internet access is offered to guests, and rooms at Orange Sky Inn Beach Huts offer air conditioning and a desk. 
+                                During your stay, take advantage of some of the amenities offered, including 24 hour front desk, a concierge, 
+                                and express check-in and check-out. </p>
+
+                            <p class="f-para">
+                                Guests of Orange Sky Inn Beach Huts are also welcome to enjoy breakfast, located on site. 
+                                For travellers arriving by car, free parking is available. Travellers looking to enjoy some tapas can head to Cafe Inn or Ciarans. 
+                                Otherwise, you may want to check out a Thai restaurant such as Rococo Pelton Restaurant Bar and Beach Huts, The Bombay Duck Bar and Restaurant, 
+                                or Roundcube Beach Cafe. </p>                                
+                            <p class="f-para">
+                                Orange Sky Inn Beach Huts puts the best of Palolem at your fingertips, making your stay both relaxing and enjoyable.</p>
                             <p>The two commonly known recreational vehicle classes are the motorized and towable.
                                 Towable rvs are the travel trailers and the fifth wheel. The rv travel trailer or fifth
                                 wheel has the attraction of getting towed by a pickup or a car, thus giving the
@@ -79,17 +115,17 @@
                         <h3>Your Reservation</h3>
                         <form action="#" id="checkAvailbityForm">
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="date" required name="checkInDate" id="checkInDate">
-                                
+                                <label for="checkInDate">Check In:</label>
+                                <input type="text" required name="checkInDate" class="date-input" id="checkInDate">
+                                <i class="icon_calendar"></i>
                             </div>
                             <div class="form-group">
                                 
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="date" required name="checkOutDate" id="checkOutDate">
-                                
+                                <label for="checkOutDate">Check Out:</label>
+                                <input type="text" required name="checkOutDate" class="date-input" id="checkOutDate">
+                                <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Guests:</label>
@@ -101,11 +137,16 @@
                             </div>
                             <div class="select-option">
                                 <label for="room">Room:</label>
-                                <select name="roomNo" required id="room">
-                                    <option value="1">1 Room</option>
+                                <select name="roomNo" required id="room" onchange="changeFormAttributes()">
+                                    <option selected value="1">1 Room</option>
                                     <option value="2">2 Room</option>
+                                    <option value="3">3 Room</option>
+                                    <option value="4">4 Room</option>
+                                    <option value="5">5 Room</option>
+                                    <option value="6">6 Room</option>
                                 </select>
                             </div>
+                            <div id="extraFormAttributes" class="m-0 p-0"></div>
                             <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
                         </form>
                     </div>
@@ -120,46 +161,93 @@
     <script>
         const checkAvailbityForm = document.getElementById('checkAvailbityForm');
         const roomBooking = document.getElementById('roomBooking');
+        const extraFormAttributes = document.getElementById('extraFormAttributes');
+
+        const roomId = '{{room._id}}';
+        const sellingPrice = parseInt('{{room.sellingPrice}}');
+        const bookingCharge = parseInt('{{room.bookingPrice}}');
+        let isBooking = location.search.split("=")[1] === 'true';
+
+        let roomNo = document.getElementById('room').value;
+
+        //document.getElementById('checkInDate').addEventListener('change', ()=>{
+        //    console.log(document.getElementById('checkInDate').value);
+        //    console.log(new Date(document.getElementById('checkInDate').value))
+        //});
+
+        const monthWordToNumber = {
+            "January": "01",
+            "February": "02",
+            "March": "03",
+            "April": "04",
+            "May": "05",
+            "June": "06",
+            "July": "07",
+            "August": "08",
+            "September": "09",
+            "October": "10",
+            "November": "11",
+            "December": "12"
+        }
+        function changeDateFormat(date) {
+            var dateArr = date.split(" ");
+            console.log(dateArr);
+            var newDate = dateArr[2] + "-" + monthWordToNumber[dateArr[1].slice(0, dateArr[1].length - 1)] + "-" + dateArr[0];
+            return newDate;
+        }
+
+        function changeFormAttributes() {
+            roomNo = document.getElementById('room').value;
+            document.getElementById('checkAvailabilityBtn').remove();
+            extraFormAttributes.innerHTML = '';
+            let htmlToBeUpdated = ` 
+               <div class="mt-4">
+                    <input required class="form-control" type="text" name="userName" id="userName" placeholder="Name*">
+                </div>
+                <div class="mt-4">
+                    <input required class="form-control" type="text" name="email" id="email" placeholder="Email*">
+                </div>
+                <div class="mt-4">
+                    <input required class="form-control" type="text" name="mobile" id="mobile" placeholder="Mobile No.*">
+                </div>
+                <p class="f-para mt-4"> Total Cost (Pay on visit): ${sellingPrice*roomNo} </p> 
+                <p class="f-para"> Booking Charge (Pay Now): ${bookingCharge} </p>
+                <button type="submit" id="checkAvailabilityBtn">Pay And Book</button>
+            `;
+            extraFormAttributes.innerHTML = htmlToBeUpdated;
+        }
+
+    
+        if (isBooking) {
+            changeFormAttributes();
+        };
+
+        document.getElementById('room').addEventListener('change', ()=>{
+            console.log(document.getElementById('room').value);
+            changeFormAttributes();
+        });
+
 
         checkAvailbityForm.addEventListener('submit', (e) => {
+            document.getElementById('checkAvailabilityBtn').innerHTML = `
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                 Loading...
+            `;
             e.preventDefault();
-            const checkInDate = document.getElementById('checkInDate').value;
-            const checkOutDate = document.getElementById('checkOutDate').value;
+            const checkInDate = changeDateFormat(document.getElementById('checkInDate').value);
+            const checkOutDate = changeDateFormat(document.getElementById('checkOutDate').value);
             const adultNo = document.getElementById('guest').value;
-            const roomNo = document.getElementById('room').value;
-            const roomId = '{{room._id}}';
+            roomNo = document.getElementById('room').value;
+            const checkAvailabilityUrl = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
 
-            const url = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
-
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.message === 'Room is available') {
-                        let userDetailDiv = document.createElement('div');
-                        userDetailDiv.classList.add('form-group');
-                        userDetailDiv.innerHTML = `
-                            <div class="col-lg-12 m-3">
-                                <input required class="form-control" type="text" name="userName" id="userName" placeholder="Name*">
-                            </div>
-                            <div class="col-lg-12 m-3">
-                                <input required class="form-control" type="text" name="email" id="email" placeholder="Email*">
-                            </div>
-                            <div class="col-lg-12 m-3">
-                                <input required class="form-control" type="text" name="mobile" id="mobile" placeholder="Mobile No.*">
-                            </div>
-                        `;
-
-                        let bookBtn = document.createElement('a');
-                        bookBtn.innerText = 'Book Now';
-                        bookBtn.classList.add('btn', 'btn-warning');
-
-                        checkAvailbityForm.appendChild(userDetailDiv);
-                        checkAvailbityForm.appendChild(bookBtn);
-                        document.getElementById('checkAvailabilityBtn').remove();
-                        bookBtn.setAttribute('type', 'button');
-                        bookBtn.addEventListener('click', () => {
-                            let bookingId; let userName; let noOfRooms;
+            if (isBooking) {
+                let bookingId; let userName; let noOfRooms;
+                fetch(checkAvailabilityUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.message === 'Room is available') {                          
+                            alert(`Room is available. \nPress OK to pay the booking charges(Rs. ${bookingCharge}) and confirm booking.`);
                             let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}`;
                             fetch(bookingUrl, {
                                 method: 'POST'
@@ -182,7 +270,7 @@
                                 })
                                 .catch(err => console.log(err));
 
-                            fetch(`/api/order/${window.location.pathname.split('/')[window.location.pathname.split('/').length-1]}`, {
+                            fetch(`/api/order/${roomId}`, {
                                 method : 'POST',
                             })
                             .then(res => res.json())
@@ -191,9 +279,9 @@
                                 console.log(bookingId);
                                 var options = {
                                     "key": "rzp_test_25WThwSFtdt8wf", // Enter the Key ID generated from the Dashboard
-                                    "name": "Acme Corp",
+                                    "name": "Orange Sky Inn",
                                     "description": "Test Transaction",
-                                    "image": "https://example.com/your_logo",
+                                    "image": "https://www.rosalie.in/img/rosalieLogo.png",
                                     "order_id": info.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                                     "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}`,
                                     "prefill": {
@@ -209,22 +297,54 @@
                                     }
                                 };
                                 var rzp1 = new Razorpay(options);
-                                const initiateRazorpay = function(e){
+                                const initiateRazorpay = function(){
                                     console.log('funnnnnnnnnnn');
                                     rzp1.open();
-                                    e.preventDefault();
                                 };
                                 initiateRazorpay();
 
                             })
-                        });
-                        alert('Room is available');
-                    } else {
-                        alert('Room is Not Available. \nPlease Check for another Date.');
-                    }
-                })
-                .catch(err => console.log(err));
+                        } else {
+                            alert('Room is Not Available. \nPlease Check for another Date or contact sales.');
+                        }
+                        document.getElementById('checkAvailabilityBtn').innerHTML = `
+                            Pay and Book
+                        `;
+                    })
+                    .catch(err => console.log(err));
+                
+            } else {
+                fetch(checkAvailabilityUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.message === 'Room is available') {                          
+                            alert('Room is available');
+                            isBooking = true;
+                            changeFormAttributes();
+                        } else {
+                            alert('Room is Not Available. \nPlease Check for another Date.');
+                        }
+                        document.getElementById('checkAvailabilityBtn').innerHTML = `
+                            Pay and Book
+                        `;
+                    })
+                    .catch(err => console.log(err));
+            }
+
         });
+
+
+        // let p = window.location.search;
+        // console.log(p);
+        // if (p.includes('?cin') && p.includes('&cout')) {
+        //     let cin = p.split('?')[1].split("&")[0].split("=")[1];
+        //     let cout = p.split('?')[1].split("&")[1].split("=")[1];
+        //     document.getElementById('checkInDate').value = cin;
+        //     document.getElementById('checkOutDate').value = cout;
+        //     document.getElementById('checkAvailabilityBtn').scrollIntoView({behavior: 'smooth'});
+        //     document.getElementById('checkAvailabilityBtn').click();
+        // }
         
 
 

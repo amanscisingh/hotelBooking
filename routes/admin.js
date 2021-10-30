@@ -5,7 +5,9 @@ const Rooms = require('../models/rooms');
 
 adminRoute.get('/', async (req, res) => {
     try {
-        let allBookings = await Bookings.find({}).lean();
+        // allBookings in rev sorted order by date
+        const allBookings = await Bookings.find({}).sort({ createdAt: -1 }).lean();
+        // let allBookings = await Bookings.find({}).lean();
         res.render('admin', { allBookings: allBookings, layout: 'blank' });
     } catch (error) {
         console.log(error);

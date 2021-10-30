@@ -4,24 +4,23 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Rosalie Beachhearts & Hotels</h1>
-                        <p>Here are the best hotel booking sites, including recommendations for international
-                            travel and for finding low-priced hotel rooms.</p>
+                        <h1>Beach-Huts & Hotels</h1>
+                        <p>Here are the best beach-huts booking sites, offerin you best stays at palolem goa beach.</p>
                         <a href="#" class="primary-btn">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
-                    <div class="booking-form">
+                    <div class="booking-form" id="roomBooking">
                         <h3>Booking Your Hotel</h3>
-                        <form action="/rooms" method="POST">
+                        <form action="#" id="checkAvailbityForm">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input onchange="dateChanged(event)" type="text" required name="checkInDate" class="date-input" id="date-in">
+                                <input onchange="dateChanged(event)" type="text" required name="checkInDate" class="date-input" id="checkInDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" required name="checkOutDate" class="date-input" id="date-out">
+                                <input type="text" required name="checkOutDate" class="date-input" id="checkOutDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
@@ -39,7 +38,7 @@
                                     <option value="2">2 Room</option>
                                 </select>
                             </div>
-                            <button type="submit">Check Availability</button>
+                            <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
                         </form>
                     </div>
                 </div>
@@ -62,9 +61,9 @@
                     <div class="about-text">
                         <div class="section-title">
                             <span>About Us</span>
-                            <h2>Hotel near Palolem Beach <br />the 4th beautiful beach in India!!!</h2>
+                            <h2>Beach-Huts near Palolem Beach <br />The 4th beautiful beach in India!!!</h2>
                         </div>
-                        <p class="f-para">Rosalie.in is a leading online accommodation site. We’re passionate about
+                        <p class="f-para">Orange Sky Inn is a leading online accommodation site. We’re passionate about
                             offering the best accomodation services with all modern Ammenities. Every day, we inspire and reach millions of tourists and make their
                             stay in Goa a beautiful stay.</p>
                         <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
@@ -72,14 +71,14 @@
                         <a onclick="scrollToAmmenities()" class="primary-btn about-btn">See Our Ammenities</a>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mt-4">
                     <div class="about-pic">
                         <div class="row">
                             <div class="col-sm-6">
-                                <img src="img/about/about-1.jpg" alt="">
+                                <img src="img/about/a1.jpeg" alt="">
                             </div>
                             <div class="col-sm-6">
-                                <img src="img/about/about-2.jpg" alt="">
+                                <img src="img/about/a2.jpeg" alt="">
                             </div>
                         </div>
                     </div>
@@ -103,8 +102,8 @@
             <div class="row">
                 <div class="col-lg-4 col-sm-6">
                     <div class="service-item">
-                        <i style="background-image: url('/img/kitchen.png'); width: 64px; height: 55px; background-size: cover;"></i>
-                        <h4>Mini Kitchen</h4>
+                        <i style="background-image: url('/img/family.png'); width: 64px; height: 55px; background-size: cover;"></i>
+                        <h4>Family Rooms</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna.</p>
                     </div>
@@ -346,6 +345,41 @@
 
 
     <script>
+        const checkAvailbityForm = document.getElementById('checkAvailbityForm');
+        const roomBooking = document.getElementById('roomBooking');
+
+        checkAvailbityForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('checkAvailabilityBtn').innerHTML = `
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                 Loading...
+            `;
+            const checkInDate = changeDateFormat(document.getElementById('checkInDate').value);
+            const checkOutDate = changeDateFormat(document.getElementById('checkOutDate').value);
+            const adultNo = document.getElementById('guest').value;
+            const roomNo = document.getElementById('room').value;
+            const roomId = '616d0d14cb6f6db1edd2f855';
+
+            const url = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.message === 'Room is available') {
+                        alert('Room is available. \nClick OK to proceed on booking page.');
+                        window.location.href = `/rooms/${roomId}?bool=true`;
+                    } else {
+                        alert('Room is Not Available. \nPlease Check for another Date.');
+                    }
+                    document.getElementById('checkAvailabilityBtn').innerHTML = `
+                        Check Availability
+                    `;
+                })
+                .catch(err => console.log(err));
+        });
+
+
         function scrollToAmmenities () {
             console.log("scrollToAmmenities");
             document.getElementById('scrollToDiv').scrollIntoView({
@@ -353,9 +387,30 @@
             });
         }
 
+        // function to change date from 29 October, 2021 to 2021-10-29 
+        const monthWordToNumber = {
+            "January": "01",
+            "February": "02",
+            "March": "03",
+            "April": "04",
+            "May": "05",
+            "June": "06",
+            "July": "07",
+            "August": "08",
+            "September": "09",
+            "October": "10",
+            "November": "11",
+            "December": "12"
+        }
+        function changeDateFormat(date) {
+            var dateArr = date.split(" ");
+            console.log(dateArr);
+            var newDate = dateArr[2] + "-" + monthWordToNumber[dateArr[1].slice(0, dateArr[1].length - 1)] + "-" + dateArr[0];
+            return newDate;
+        }
+
         function dateChanged(event) {
-            console.log("dateChanged");
-            var date = new Date(event.target.value);
+            var date = changeDateFormat(event.target.value);
             console.log(date);
         }
     </script>

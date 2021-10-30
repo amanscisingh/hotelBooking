@@ -12,12 +12,14 @@ apiRoute.get('/rooms/checkAvailability', async (req, res) => {
         const rooms = await Rooms.find({ _id: roomId }).lean();
         const totalRoomsAvailable = rooms[0].totalRooms;
         const bookings = await Bookings.find({ roomId: roomId }).lean();
+        console.log(new Date(checkInDate), new Date(checkOutDate));
         let bookedArray = [];
         let totalBookings = 0;  
         for (let i = 0; i < bookings.length; i++) {
 
-            if (bookings[i].checkIn <= new Date(checkOutDate) && bookings[i].checkOut > new Date(checkInDate)) {
+            if (bookings[i].checkIn <= new Date(checkOutDate) && bookings[i].checkOut > new Date(checkInDate)  && bookings[i].status != 'partialBooked') {
                 totalBookings+= bookings[i].noOfRooms;
+                console.log(bookings[i].status);
             } else {
                 bookedArray.push(bookings[i]);
             }
@@ -86,7 +88,7 @@ apiRoute.post('/order/:id', async (req, res) => {
         const { id } = req.params;
         const roomData = await Rooms.findById(id).lean();
         var options = {
-            amount: roomData.sellingPrice * 100,  // amount in the smallest currency unit  
+            amount: roomData.bookingPrice * 100,  // amount in the smallest currency unit  
             currency: "INR",  
             // receipt: "order_rcptid_11"
     };

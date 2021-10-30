@@ -44,8 +44,16 @@
                 <input type="number" class="form-control" id="totalRooms" name="totalRooms" value="${room.totalRooms}">
             </div>
             <div class="form-group m-4">
-                <label for="price">Price</label>
-                <input type="number" class="form-control" id="price" name="price" value="${room.price}">
+                <label for="price"><s>Actual Price</s></label>
+                <input type="number" class="form-control" id="price" name="price" value="${room.actualPrice}">
+            </div>
+            <div class="form-group m-4">
+                <label for="price">Selling Price</label>
+                <input type="number" class="form-control" id="price" name="price" value="${room.sellingPrice}">
+            </div>
+            <div class="form-group m-4">
+                <label for="price">Booking Price</label>
+                <input type="number" class="form-control" id="price" name="price" value="${room.bookingPrice}">
             </div>
             <input type=submit class="btn btn-primary" value="Update Room Details">
         </form>

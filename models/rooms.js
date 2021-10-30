@@ -25,6 +25,10 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    bookingPrice: {
+        type: Number,
+        required: true
+    },
 }, {
     timestamps: true
 });
