@@ -1,9 +1,9 @@
 => booking+payment+email after successful payment...
 
 FRONT END
-1. collect images from other web sited
-2. collect descriptions from other websites
-3. put it jhere to give a final touch...
+1. collect images from other web sited ....DONE
+2. collect descriptions from other websites ....DONE...80%
+3. put it here to give a final touch...
 4. after payment success...
 5. after payment failure...
 
@@ -11,10 +11,10 @@ FRONT END
 
 
 BACKEND
-1. room modification displayPrice, sellingPrice, bookingPrice
-2. 1st ask adults then adults*2 rooms
+1. room modification displayPrice, sellingPrice, bookingPrice ....DONE
+2. 1st ask adults then adults*2 rooms ....DONE
 3. email on checkIn, checkOut, bookingCancled, partiallyBooked -> contact hotel waale...
-4. 
+4. checkOut ko count mt kro booked rooms m...
 
 
 
@@ -43,3 +43,38 @@ During your stay, take advantage of some of the amenities offered, including 24 
 Travellers looking to enjoy some tapas can head to Cafe Inn or Ciarans. Otherwise, you may want to check out a Thai restaurant such as Rococo Pelton Restaurant Bar and Beach Huts, The Bombay Duck Bar and Restaurant, or Roundcube Beach Cafe.
 
 Orange Sky Inn Beach Huts puts the best of Palolem at your fingertips, making your stay both relaxing and enjoyable.
+
+
+
+
+ABOUT THE DESTINATION
+The Orange Sky Hub Located at Down st, Palolem, Canacona, Goa, South India. It’s only 2 minutes from Palolem and an hour and a half from the airport. It’s the perfect place to escape the crowds and enjoy the incredible view, luxury and privacy of this unique resort.
+
+
+18 m² Balcony Garden view Air conditioning  Free WiFi
+
+Shower, Safety deposit box, Toilet, Sofa, Towels, Linen, Socket near the bed, Desk, Seating Area, Private entrance, Fan, Carpeted, Outdoor furniture, Wardrobe or closet, Entire unit located on ground floor, Toilet paper, Hand sanitiser, TV
+
+Single-room air conditioning for guest accommodation
+
+Located in Canacona, 200 m from Palolem Beach, Orange Sky Inn provides accommodation with a restaurant, free private parking, a bar and a garden. Featuring room service, this property also provides guests with a sun terrace. The accommodation features a 24-hour front desk, a shared kitchen and currency exchange for guests.
+
+At the hotel, the rooms have a desk. At Orange Sky Inn, every room is equipped with air conditioning and a private bathroom.
+
+Guests at the accommodation can enjoy an American or an Asian breakfast.
+
+Netravali Wildlife Sanctuary is 22 km from Orange Sky Inn. The nearest airport is Dabolim Airport, 47 km from the hotel.
+
+We speak your language!
+
+
+Palolem Beach
+200 m
+Colomb Beach
+550 m
+Patnem Beach
+950 m
+Rajbaga Beach
+1.7 km
+Talpona Beach
+3.1 km

@@ -43,6 +43,11 @@ const pastBookingsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pymentId: {
+        type: String,
+        required: true,
+        default: null
+    },
 }, {
     timestamps: true
 });

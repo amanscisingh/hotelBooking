@@ -6,7 +6,7 @@
             <span style="float: right;"><a href="/admin/rooms" type="button" class="btn btn-primary">Edit Rooms</a></span>
         </div>
         <div class="card-body">
-            <div class="table-responsive" style="text-align: center;">
+            <div class="table-responsive" style="text-align: center; height: 100vh;">
                 <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
@@ -47,7 +47,9 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <li id="delete"><a class="dropdown-item" href="/api/deleteBooking/{{this._id}}">Delete</a></li>
-                                            <li id="cancle"><a class="dropdown-item" href="/api/cancleBooking/{{this._id}}">Cancle Booking</a></li>
+                                            {{#if (isCancellable this.status) }}
+                                                <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Booking</a></li>
+                                            {{/if}}
                                             <li id="checkIn"><a class="dropdown-item" href="/api/markCheckIn/{{this._id}}">Check In</a></li>
                                             <li id="checkOut"><a class="dropdown-item" href="/api/markCheckOut/{{this._id}}">Check Out</a></li>
                                         </ul>

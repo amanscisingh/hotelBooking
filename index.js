@@ -19,7 +19,15 @@ mongoose.connect(MONGODB_URI, {
     })
 })
 
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
+function isCancellable(status) {
+    if (status !== 'checkedIn' && status !== 'checkedOut') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable } }));
 app.set("view engine", ".hbs");
 
 app.use(express.static(__dirname + "/public/"));
