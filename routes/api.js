@@ -228,6 +228,7 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 mobile: booking.mobile,
                 status: booking.status,
                 noOfRooms: booking.noOfRooms,
+                paymentId: booking.paymentId,
             });
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);

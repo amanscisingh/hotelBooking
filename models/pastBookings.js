@@ -43,7 +43,7 @@ const pastBookingsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    pymentId: {
+    paymentId: {
         type: String,
         required: true,
         default: null
