@@ -66,5 +66,10 @@ homeRoute.get('/gallery', (req, res) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+
+homeRoute.get('/tnc', (req, res)=>{
+    res.render('tnc');
 })
 module.exports = homeRoute;
