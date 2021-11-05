@@ -381,7 +381,7 @@ apiRoute.get('/markCheckOut/:id', async (req, res) => {
             
             let mailOptions = {
                 from: 'orangeskybookings@gmail.com',
-                to: `${booking.email}`,
+                to: `${booking.email}, orangeskybookings@gmail.com`,
                 subject: 'Checked Out from Orange Sky Inn!',
                 text: 'Greetings & Regards!',
                 html: checkOutMail(booking._id, booking.userName, booking.email, booking.mobile, booking.children, booking.adults, booking.checkIn, booking.checkOut, booking.noOfRooms)
