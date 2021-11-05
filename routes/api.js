@@ -81,13 +81,12 @@ apiRoute.post('/booking', async (req, res) => {
 
 // route for razor pay
 const razorpay = new RazorPay({
-    key_id: "rzp_test_25WThwSFtdt8wf",
-    key_secret: "L3Zq82uskZJJ3thFvBxB4DVL"
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 apiRoute.post('/order/:id', async (req, res) => {
     try {
-        console.log('a.order/:id');
         const { id } = req.params;
         const roomData = await Rooms.findById(id).lean();
         var options = {
@@ -131,26 +130,6 @@ apiRoute.post('/payments/callback', async (req, res) => {
         // });
 
         let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, payment.amount / 100);
-    
-        // create reusable transporter object using the default SMTP transport
-        // let transporter = nodemailer.createTransport({
-        //     host: "smtp.gmail.net",
-        //     port: 465,
-        //     secure: true, // true for 465, false for other ports
-        //     auth: {
-        //         user: "hotel@rosalie.in", // generated ethereal user
-        //         pass: "Iamrich@7", // generated ethereal password
-        //     },
-        // });
-    
-        // // send mail with defined transport object
-        // let info = await transporter.sendMail({
-        //     from: 'hotel@rosalie.in', // sender address
-        //     to: payment.email+ ", hotel@rosalie.in", // list of receivers
-        //     subject: "Booking Confirmed at Rosalie Hotel!", // Subject line
-        //     text: "Hello world?", // plain text body
-        //     html: htmlNew, // html body
-        // });
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
