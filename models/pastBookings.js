@@ -48,6 +48,14 @@ const pastBookingsSchema = new mongoose.Schema({
         required: true,
         default: null
     },
+    amountPaid: {
+        type: Number,
+        default: 0
+    },
+    totalAmount: {
+        type: Number,
+        // required: true
+    },
 }, {
     timestamps: true
 });

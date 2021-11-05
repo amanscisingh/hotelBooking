@@ -229,8 +229,10 @@
                 <div class="mt-4">
                     <input required class="form-control" type="text" name="mobile" id="mobile" placeholder="Mobile No.*">
                 </div>
-                <p class="f-para mt-4"> Total Cost (Pay on visit): ${sellingPrice*roomNo} </p> 
-                <p class="f-para"> Booking Charge (Pay Now): ${bookingCharge} </p>
+                <p class="f-para mt-4"> Total Cost: ${sellingPrice*roomNo} </p> 
+                <p class="f-para mt-4"> Tax (12%): ${sellingPrice*roomNo*0.12} </p> 
+                <p class="f-para mt-4"> Total (Pay on visit): ${sellingPrice*roomNo*1.12} </p> 
+                <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
                 <button type="submit" id="checkAvailabilityBtn">Pay And Book</button>
             `;
             extraFormAttributes.innerHTML = htmlToBeUpdated;
@@ -258,6 +260,8 @@
             const adultNo = document.getElementById('guest').value;
             roomNo = document.getElementById('room').value;
             const checkAvailabilityUrl = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
+            let totalAmount = sellingPrice*roomNo*1.12;
+            let amountPaid = bookingCharge*roomNo;
 
             if (isBooking) {
                 let bookingId; let userName; let noOfRooms;
@@ -267,7 +271,7 @@
                         console.log(data);
                         if (data.message === 'Room is available') {                          
                             alert(`Room is available. \nPress OK to pay the booking charges(Rs. ${bookingCharge}) and confirm booking.`);
-                            let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}`;
+                            let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}`;
                             fetch(bookingUrl, {
                                 method: 'POST'
                             })
@@ -289,7 +293,7 @@
                                 })
                                 .catch(err => console.log(err));
 
-                            fetch(`/api/order/${roomId}`, {
+                            fetch(`/api/order/${amountPaid}`, {
                                 method : 'POST',
                             })
                             .then(res => res.json())
@@ -302,7 +306,7 @@
                                     "description": "Live Transaction",
                                     // "image": "https://www.rosalie.in/img/rosalieLogo.png",
                                     "order_id": info.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                                    "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}`,
+                                    "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}&amountPaid=${amountPaid}&totalAmount=${totalAmount}`,
                                     "prefill": {
                                         "name": document.getElementById('userName').value,
                                         "email": document.getElementById('email').value,

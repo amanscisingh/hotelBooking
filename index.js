@@ -27,7 +27,15 @@ function isCancellable(status) {
     }
 }
 
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable } }));
+function timeElapsedFromNow(dateTime) {
+    const now = new Date();
+    const timeElapsed = now.getTime() - dateTime.getTime();
+    const timeElapsedInMinutes = timeElapsed / (1000 * 60);
+    const timeElapsedInHours = timeElapsedInMinutes / 60;
+    return Math.round(timeElapsedInHours);
+}
+
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable, timeElapsedFromNow } }));
 app.set("view engine", ".hbs");
 
 app.use(express.static(__dirname + "/public/"));

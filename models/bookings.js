@@ -46,6 +46,14 @@ const bookingsSchema = new mongoose.Schema({
     paymentId: {
         type: String,
     },
+    amountPaid: {
+        type: Number,
+        default: 0
+    },
+    totalAmount: {
+        type: Number,
+        // required: true
+    },
 }, {
     timestamps: true
 });

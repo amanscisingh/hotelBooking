@@ -1,6 +1,7 @@
 const express = require('express');
 const homeRoute = express.Router();
 const Rooms = require('../models/rooms');
+const Bookings = require('../models/bookings');
 
 homeRoute.get('/', (req, res) => {
     try {
@@ -71,5 +72,19 @@ homeRoute.get('/gallery', (req, res) => {
 
 homeRoute.get('/tnc', (req, res)=>{
     res.render('tnc');
+})
+
+
+homeRoute.get('/checkBookings', async (req, res)=>{
+    try {
+        let { email } = req.query;
+        console.log(email);
+        let bookings = await Bookings.find({ email: email, status: { $ne: 'partialBooked' } }).sort({ createdAt: -1 }).lean();
+        console.log(bookings);
+
+        res.render('checkBooking', { email: email, allBookings:bookings });
+    } catch (error) {
+        console.log(error);
+    }
 })
 module.exports = homeRoute;

@@ -18,6 +18,9 @@
                             <th class="th-sm">Children</th>
                             <th class="th-sm">CheckIn</th>
                             <th class="th-sm">CheckOut</th>
+                            <th class="th-sm">Total Amount</th>
+                            <th class="th-sm">Paid Amount</th>
+                            <th class="th-sm">Time Since Booking (Hours)</th>
                             <th class="th-sm">Status</th>
                             <th class="th-sm">Action</th>
                         </tr>
@@ -33,6 +36,9 @@
                                 <td>{{this.children}}</td>
                                 <td>{{this.checkIn}}</td>
                                 <td>{{this.checkOut}}</td>
+                                <td>{{this.totalAmount}}</td>
+                                <td>{{this.amountPaid}}</td>
+                                <td>{{timeElapsedFromNow this.updatedAt}}</td>
                                 <td>{{this.status}}</td>
                                 <td>
                                     <div class="dropdown">
@@ -48,7 +54,8 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <li id="delete"><a class="dropdown-item" href="/api/deleteBooking/{{this._id}}">Delete</a></li>
                                             {{#if (isCancellable this.status) }}
-                                                <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Booking</a></li>
+                                                <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Full Refund</a></li>
+                                                <li id="refund"><a class="dropdown-item" href="/api/cancelNoRefund/{{this._id}}">Cancel No Refund</a></li>                                    
                                             {{/if}}
                                             <li id="checkIn"><a class="dropdown-item" href="/api/markCheckIn/{{this._id}}">Check In</a></li>
                                             <li id="checkOut"><a class="dropdown-item" href="/api/markCheckOut/{{this._id}}">Check Out</a></li>

@@ -53,10 +53,17 @@ apiRoute.get('/rooms/checkAvailability', async (req, res) => {
 // route to add a booking
 apiRoute.post('/booking', async (req, res) => {
     try {
-        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children } = req.query;
+        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount } = req.query;
+        // change time in 2021-11-17T00:00:00.000Z to 11:00 am
+        let checkIn = new Date(checkInDate);
+        checkIn.setHours(12, 30, 0, 0);
+        let checkOut = new Date(checkOutDate);
+        checkOut.setHours(11, 00, 0, 0);
+
+        
         const booking = new Bookings({
-            checkIn: new Date(checkInDate),
-            checkOut: new Date(checkOutDate),
+            checkIn: checkIn,
+            checkOut: checkOut,
             roomId: roomId,
             roomNo: roomNo,
             adults: adultNo,
@@ -65,7 +72,9 @@ apiRoute.post('/booking', async (req, res) => {
             mobile: mobile,
             status: 'partialBooked',
             noOfRooms: noOfRooms,
-            children: children
+            children: children,
+            totalAmount: totalAmount,
+            amountPaid: 0,
         });
         // console.log(booking);
         const savedBooking = await booking.save();
@@ -85,12 +94,12 @@ const razorpay = new RazorPay({
     key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-apiRoute.post('/order/:id', async (req, res) => {
+apiRoute.post('/order/:amountPaid', async (req, res) => {
     try {
-        const { id } = req.params;
-        const roomData = await Rooms.findById(id).lean();
+        const { amountPaid } = req.params;
+       
         var options = {
-            amount: roomData.bookingPrice * 100,  // amount in the smallest currency unit  
+            amount: amountPaid * 100,  // amount in the smallest currency unit  
             currency: "INR",  
             // receipt: "order_rcptid_11"
         };
@@ -111,7 +120,7 @@ apiRoute.post('/order/:id', async (req, res) => {
 
 apiRoute.post('/payments/callback', async (req, res) => {
     console.log("Callback hitted....");
-    const { bookingId, name, checkIn, checkOut, noOfRooms  } = req.query;
+    const { bookingId, name, checkIn, checkOut, noOfRooms, amountPaid, totalAmount  } = req.query;
     console.log(bookingId);
     let booking = await Bookings.findById(bookingId);
     let status = 'Partially Booked (Not Paid)'
@@ -122,6 +131,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
             status = 'Paid & Confirmed';
             booking.status = 'booked';
             booking.paymentId = payment.id;
+            booking.amountPaid = amountPaid;
             const savedBooking = await booking.save();
         }
         // res.status(200).json({
@@ -129,7 +139,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
         //     data: payment
         // });
 
-        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, payment.amount / 100);
+        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, totalAmount);
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -155,7 +165,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
             }
         });
 
-        res.render('bookingConfirmed', {data: payment, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status });
+        res.render('bookingConfirmed', {data: payment, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status, totalAmount:totalAmount });
         // console.log("Message sent: %s", info.messageId);
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     
@@ -190,6 +200,54 @@ apiRoute.post('/editRoom/:id', async (req, res) => {
     }
 })
 
+apiRoute.get('/cancelNoRefund/:id' , async (req, res) => {
+    try {
+        let bookingId = req.params.id;
+        let booking = await Bookings.findById(bookingId);
+        if (booking) {
+            booking.status = 'cancelled';
+            const savedBooking = await booking.save();
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'orangeskybookings@gmail.com',
+                    pass:'1234amanscisingh1234'
+                }
+            })
+            
+            let mailOptions = {
+                from: 'orangeskybookings@gmail.com',
+                to: `${booking.email}`,
+                subject: 'Booking Cancelled at Orange Sky Inn!',
+                text: 'Greetings & Regards!',
+                html: cancelledMail(booking._id, booking.userName, booking.email, booking.mobile, booking.noOfRooms, "0")
+            }
+    
+            transporter.sendMail(mailOptions, (err, data) => {
+                if (err) {
+                    console.log('Error Occurd!', err)
+                } else {
+                    console.log('email sent...')
+                }
+            });
+           
+            // res.status(200).json({
+            //     message: 'Booking cancelled successfully',
+            //     data: savedBooking
+            // });
+        } else {
+            res.status(200).json({
+                message: 'Booking not found',
+                data: booking
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 // route to handle booking status
 apiRoute.get('/deleteBooking/:id', async (req, res) => {
     try {
@@ -208,11 +266,13 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 status: booking.status,
                 noOfRooms: booking.noOfRooms,
                 paymentId: booking.paymentId,
+                totalAmount: booking.totalAmount,
+                amountPaid: booking.amountPaid,
             });
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);
             const deletedBooking = await Bookings.findByIdAndDelete(bookingId);
-            res.redirect('/admin');
+            res.redirect('/vicky21');
             // res.status(200).json({
             //     message: 'Booking deleted successfully',
             //     data: deletedBooking
@@ -248,7 +308,7 @@ apiRoute.get('/cancelBooking/:id', async (req, res) => {
             
             let mailOptions = {
                 from: 'orangeskybookings@gmail.com',
-                to: `amanscisingh@gmail.com, ${booking.email}`,
+                to: `${booking.email}`,
                 subject: 'Booking Cancelled at Orange Sky Inn!',
                 text: 'Greetings & Regards!',
                 html: cancelledMail(booking._id, booking.userName, booking.email, booking.mobile, booking.noOfRooms, wasBooked ? roomInfo.bookingPrice : "0")
@@ -271,10 +331,18 @@ apiRoute.get('/cancelBooking/:id', async (req, res) => {
                     console.log('Status:', response.statusCode);
                     console.log('Headers:', JSON.stringify(response.headers));
                     console.log('Response:', body);
+                    if (response.statusCode === 200) {
+                        console.log('Refund Initiated!');
+                        res.redirect('/vicky21');
+                    } else {
+                        res.send('Refund Failed! Maybe already refunded! Check Rayzorpay dashboard for more information.');
+                    }
                   });
+            } else {
+                res.redirect('/vicky21');
             }
 
-            res.redirect('/admin');
+            
             // res.status(200).json({
             //     message: 'Booking cancelled successfully',
             //     data: savedBooking
@@ -324,7 +392,7 @@ apiRoute.get('/markCheckIn/:id', async (req, res) => {
                 }
             });
 
-            res.redirect('/admin');
+            res.redirect('/vicky21');
             // res.status(200).json({
             //     message: 'Booking checked in successfully',
             //     data: savedBooking
@@ -374,7 +442,7 @@ apiRoute.get('/markCheckOut/:id', async (req, res) => {
                 }
             });
 
-            res.redirect('/admin');
+            res.redirect('/vicky21');
             // res.status(200).json({
             //     message: 'Booking checked out successfully',
             //     data: savedBooking
