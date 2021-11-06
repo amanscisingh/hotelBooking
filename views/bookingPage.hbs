@@ -171,9 +171,9 @@
                 <p class="f-para mt-4"> Total Cost : ${breakFastPrice+sellingPrice*roomNo} ₹ /pernight </p>
                 <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Exclusive): ${Math.round((breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12 * 100) / 100} ₹ /pernight </p>
                 <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
-                <button type="submit" id="checkAvailabilityBtn" onclick="changeBookingStatus(true)">Pay Now Confirm Booking</button>
+                <button type="submit" id="checkAvailabilityBtn" onclick="changeBookingStatus(true)">Pay Now & Confirm Booking</button>
                 <p>*Booking Confirmation Guaranteed</p>
-                <button id="checkAvailabilityBtn2" onclick="changeBookingStatus(false)">Book Now Pay At Hotel</button>
+                <button id="checkAvailabilityBtn2" onclick="changeBookingStatus(false)">Book Now & Pay At Hotel</button>
                 <p>*Bookings will be tentative</p>
             `;
             extraFormAttributes2.innerHTML = htmlToBeUpdated;
@@ -355,8 +355,9 @@
                                 alert('Room is Not Available. \nPlease Check for another Date or contact sales.');
                             }
                             document.getElementById('checkAvailabilityBtn').innerHTML = `
-                                Pay and Book
+                                Book Now & Pay At Hotel
                             `;
+                            document.getElementById('checkAvailabilityBtn').disabled = false;
                         })
                         .catch(err => console.log(err));
                     
@@ -374,7 +375,7 @@
                                 alert('Room is Not Available. \nPlease Check for another Date.');
                             }
                             document.getElementById('checkAvailabilityBtn').innerHTML = `
-                                Pay Now Confirm Booking
+                                Pay Now & Confirm Booking
                             `;
                             document.getElementById('checkAvailabilityBtn').disabled = false;
                         })
