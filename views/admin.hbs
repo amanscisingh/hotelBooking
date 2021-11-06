@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <span style="float: left;"><h4 class="card-title">Bookings Datatable</h4> </span>
-            <span style="float: right;"><a href="/admin/rooms" type="button" class="btn btn-primary">Edit Rooms</a></span>
+            <span style="float: right;"><a href="/vicky21/rooms" type="button" class="btn btn-primary">Edit Rooms</a></span>
         </div>
         <div class="card-body">
             <div class="table-responsive" style="text-align: center; height: 100vh;">
@@ -16,8 +16,10 @@
                             <th class="th-sm">Mob No.</th>
                             <th class="th-sm">Adults</th>
                             <th class="th-sm">Children</th>
+                            <th class="th-sm">No Of Rooms</th>
                             <th class="th-sm">CheckIn</th>
                             <th class="th-sm">CheckOut</th>
+                            <th class="th-sm">Break Fast Amount</th>
                             <th class="th-sm">Total Amount</th>
                             <th class="th-sm">Paid Amount</th>
                             <th class="th-sm">Time Since Booking (Hours)</th>
@@ -34,8 +36,10 @@
                                 <td>{{this.mobile}}</td>
                                 <td>{{this.adults}}</td>
                                 <td>{{this.children}}</td>
+                                <td>{{this.noOfRooms}}</td>
                                 <td>{{this.checkIn}}</td>
                                 <td>{{this.checkOut}}</td>
+                                <td>{{this.breakfastAmount}}</td>
                                 <td>{{this.totalAmount}}</td>
                                 <td>{{this.amountPaid}}</td>
                                 <td>{{timeElapsedFromNow this.updatedAt}}</td>
@@ -53,12 +57,14 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <li id="delete"><a class="dropdown-item" href="/api/deleteBooking/{{this._id}}">Delete</a></li>
-                                            {{#if (isCancellable this.status) }}
-                                                <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Full Refund</a></li>
-                                                <li id="refund"><a class="dropdown-item" href="/api/cancelNoRefund/{{this._id}}">Cancel No Refund</a></li>                                    
+                                            {{#if (isCancelled this.status) }}
+                                                {{#if (isCancellable this.status) }}
+                                                    <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Full Refund</a></li>
+                                                    <li id="refund"><a class="dropdown-item" href="/api/cancelNoRefund/{{this._id}}">Cancel No Refund</a></li>                                    
+                                                {{/if}}
+                                                <li id="checkIn"><a class="dropdown-item" href="/api/markCheckIn/{{this._id}}">Check In</a></li>
+                                                <li id="checkOut"><a class="dropdown-item" href="/api/markCheckOut/{{this._id}}">Check Out</a></li>                                    
                                             {{/if}}
-                                            <li id="checkIn"><a class="dropdown-item" href="/api/markCheckIn/{{this._id}}">Check In</a></li>
-                                            <li id="checkOut"><a class="dropdown-item" href="/api/markCheckOut/{{this._id}}">Check Out</a></li>
                                         </ul>
                                     </div>
                                     {{!-- <a href="/api/deleteBooking/{{this._id}}" style="cursor:pointer;">

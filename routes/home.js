@@ -25,8 +25,9 @@ homeRoute.get('/rooms', async (req, res)=> {
 homeRoute.get('/rooms/:id', async (req, res)=> {
     try {
         let room = await Rooms.findById(req.params.id).lean();
+        let { checkIn, checkOut, bool } = req.query;
         console.log(room);
-        res.render('singleRoom', { room: room });
+        res.render('singleRoom', { room: room, checkIn: checkIn, checkOut: checkOut, bool: bool });
         // res.send(room);
     } catch (error) {
         console.log(error);

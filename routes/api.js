@@ -28,7 +28,7 @@ apiRoute.get('/rooms/checkAvailability', async (req, res) => {
         };
         // console.log(bookings);
         const totalRoomsBooked = totalRoomsAvailable - totalBookings;
-        const roomsAvailable = totalRoomsBooked > 0 ? true : false;
+        const roomsAvailable = totalRoomsBooked >= roomNo ? true : false;
         console.log('Total Rooms Available: ', totalRoomsAvailable);
         console.log('Total Rooms booked in b/w given checkin and checkout date: ', totalBookings);
         
@@ -53,7 +53,7 @@ apiRoute.get('/rooms/checkAvailability', async (req, res) => {
 // route to add a booking
 apiRoute.post('/booking', async (req, res) => {
     try {
-        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount } = req.query;
+        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice } = req.query;
         // change time in 2021-11-17T00:00:00.000Z to 11:00 am
         let checkIn = new Date(checkInDate);
         checkIn.setHours(12, 30, 0, 0);
@@ -75,6 +75,7 @@ apiRoute.post('/booking', async (req, res) => {
             children: children,
             totalAmount: totalAmount,
             amountPaid: 0,
+            breakfastAmount: breakFastPrice
         });
         // console.log(booking);
         const savedBooking = await booking.save();
@@ -139,7 +140,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
         //     data: payment
         // });
 
-        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, totalAmount);
+        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, Math.round(totalAmount*100)/100);
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -165,7 +166,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
             }
         });
 
-        res.render('bookingConfirmed', {data: payment, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status, totalAmount:totalAmount });
+        res.render('bookingConfirmed', {data: payment, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status, totalAmount:Math.round(totalAmount*100)/100 });
         // console.log("Message sent: %s", info.messageId);
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     
@@ -194,9 +195,10 @@ apiRoute.post('/editRoom/:id', async (req, res) => {
         const updatedRoom = await Rooms.findByIdAndUpdate(id, roomReq).lean();
         console.log(updatedRoom);
         // res.status(200).json(updatedRoom);
-        res.redirect('/admin/rooms')
+        res.redirect('/vicky21/rooms')
     } catch (error) {
         console.log(error);
+        res.redirect('/vicky21/rooms')
     }
 })
 
@@ -231,6 +233,8 @@ apiRoute.get('/cancelNoRefund/:id' , async (req, res) => {
                     console.log('email sent...')
                 }
             });
+
+            res.redirect('/vicky21');
            
             // res.status(200).json({
             //     message: 'Booking cancelled successfully',
@@ -268,6 +272,7 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 paymentId: booking.paymentId,
                 totalAmount: booking.totalAmount,
                 amountPaid: booking.amountPaid,
+                breakfastPrice: booking.breakfastPrice,
             });
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);
@@ -293,54 +298,52 @@ apiRoute.get('/cancelBooking/:id', async (req, res) => {
         let bookingId = req.params.id;
         let booking = await Bookings.findById(bookingId);
         let roomInfo = await Rooms.findById(booking.roomId);
-        let wasBooked = booking.status === 'booked' ? true : false;
         if (booking) {
-            booking.status = 'cancelled';
-            const savedBooking = await booking.save();
-
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'orangeskybookings@gmail.com',
-                    pass:'1234amanscisingh1234'
-                }
-            })
-            
-            let mailOptions = {
-                from: 'orangeskybookings@gmail.com',
-                to: `${booking.email}`,
-                subject: 'Booking Cancelled at Orange Sky Inn!',
-                text: 'Greetings & Regards!',
-                html: cancelledMail(booking._id, booking.userName, booking.email, booking.mobile, booking.noOfRooms, wasBooked ? roomInfo.bookingPrice : "0")
-            }
-    
-            transporter.sendMail(mailOptions, (err, data) => {
-                if (err) {
-                    console.log('Error Occurd!', err)
-                } else {
-                    console.log('email sent...')
-                }
-            });
-
             // initiate refund
-            if (wasBooked) {
-                request({
-                    method: 'POST',
-                    url: `https://${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}@api.razorpay.com/v1/payments/${booking.paymentId}/refund`,
-                  }, function (error, response, body) {
-                    console.log('Status:', response.statusCode);
-                    console.log('Headers:', JSON.stringify(response.headers));
-                    console.log('Response:', body);
-                    if (response.statusCode === 200) {
-                        console.log('Refund Initiated!');
-                        res.redirect('/vicky21');
-                    } else {
-                        res.send('Refund Failed! Maybe already refunded! Check Rayzorpay dashboard for more information.');
-                    }
-                  });
-            } else {
-                res.redirect('/vicky21');
-            }
+            request({
+                method: 'POST',
+                url: `https://${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}@api.razorpay.com/v1/payments/${booking.paymentId}/refund?amount=${parseInt(booking.amountPaid*80)}`,
+                }, function (error, response, body) {
+                console.log(booking.amountPaid*80);
+                console.log('Status:', response.statusCode);
+                console.log('Headers:', JSON.stringify(response.headers));
+                console.log('Response:', body);
+                if (response.statusCode === 200) {
+                    console.log('Refund Initiated!');
+                    booking.status = 'cancelled';
+                    booking.save().then(()=>{
+                        let transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: 'orangeskybookings@gmail.com',
+                                pass:'1234amanscisingh1234'
+                            }
+                        })
+                        
+                        let mailOptions = {
+                            from: 'orangeskybookings@gmail.com',
+                            to: `${booking.email}`,
+                            subject: 'Booking Cancelled at Orange Sky Inn!',
+                            text: 'Greetings & Regards!',
+                            html: cancelledMail(booking._id, booking.userName, booking.email, booking.mobile, booking.noOfRooms, booking.amountPaid*.80)
+                        }
+                
+                        transporter.sendMail(mailOptions, (err, data) => {
+                            if (err) {
+                                console.log('Error Occurd!', err)
+                            } else {
+                                console.log('email sent...')
+                            }
+                        });
+                    });
+
+                    res.redirect('/vicky21');
+                    
+                } else {
+                    res.send('Refund Failed! Maybe already refunded! Check Rayzorpay dashboard for more information.');
+                }
+                });
+            
 
             
             // res.status(200).json({

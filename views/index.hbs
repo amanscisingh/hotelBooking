@@ -371,7 +371,7 @@
                     console.log(data);
                     if (data.message === 'Room is available') {
                         alert('Room is available. \nClick OK to proceed on booking page.');
-                        window.location.href = `/rooms/${roomId}?bool=true`;
+                        window.location.href = `/rooms/${roomId}?bool=true&checkIn=${document.getElementById('checkInDate').value}&checkOut=${document.getElementById('checkOutDate').value}`;
                     } else {
                         alert('Room is Not Available. \nPlease Check for another Date.');
                     }

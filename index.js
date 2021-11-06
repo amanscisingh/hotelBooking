@@ -20,7 +20,15 @@ mongoose.connect(MONGODB_URI, {
 })
 
 function isCancellable(status) {
-    if (status !== 'checkedIn' && status !== 'checkedOut') {
+    if (status !== 'checkedIn' && status !== 'checkedOut' && status !== 'cancelled') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isCancelled(status) {
+    if (status !== 'cancelled') {
         return true;
     } else {
         return false;
@@ -35,7 +43,7 @@ function timeElapsedFromNow(dateTime) {
     return Math.round(timeElapsedInHours);
 }
 
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable, timeElapsedFromNow } }));
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable, timeElapsedFromNow, isCancelled } }));
 app.set("view engine", ".hbs");
 
 app.use(express.static(__dirname + "/public/"));
