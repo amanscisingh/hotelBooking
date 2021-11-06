@@ -256,7 +256,7 @@
             extraFormAttributes2.innerHTML = '';
             let htmlToBeUpdated = ` 
                 <p class="f-para mt-4"> Room Cost : ${sellingPrice*roomNo} ₹ /pernight </p> 
-                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /perday</p>
+                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /(150 ₹)per breakfast</p>
                 <p class="f-para mt-4"> Total Cost : ${breakFastPrice+sellingPrice*roomNo} ₹ /pernight </p>
                 <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Exclusive): ${Math.round((breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12 * 100) / 100} ₹ /pernight </p>
                 <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
@@ -275,7 +275,7 @@
                 extraFormAttributes3.innerHTML = '';
                 let htmlToBeUpdated = ` 
                     <div class="mt-4">
-                        <input required class="form-control" onchange="changeFormAttributes2()" type="number" min="0" name="breakfastNo" id="breakfastNo" placeholder="Break Fast No.*">
+                        <input required class="form-control" onchange="changeFormAttributes2()" type="number" min="0" name="breakfastNo" id="breakfastNo" placeholder="Number of BreakFast">
                     </div>
                 `;
                 extraFormAttributes3.innerHTML = htmlToBeUpdated;
