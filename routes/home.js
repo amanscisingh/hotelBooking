@@ -92,8 +92,8 @@ homeRoute.get('/tnc', (req, res)=>{
 homeRoute.get('/checkBookings', async (req, res)=>{
     try {
         let { email } = req.query;
-        console.log(email);
-        let bookings = await Bookings.find({ email: email, status: { $ne: 'partialBooked' } }).sort({ createdAt: -1 }).lean();
+        console.log('---', email);
+        let bookings = await Bookings.find({ email: email }).sort({ createdAt: -1 }).lean();
         console.log(bookings);
 
         res.render('checkBooking', { email: email, allBookings:bookings });
