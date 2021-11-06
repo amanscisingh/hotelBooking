@@ -59,7 +59,10 @@
                                             <li id="delete"><a class="dropdown-item" href="/api/deleteBooking/{{this._id}}">Delete</a></li>
                                             {{#if (isCancelled this.status) }}
                                                 {{#if (isCancellable this.status) }}
-                                                    <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel Full Refund</a></li>
+                                                    {{#if (notPartiallyBooked this.status) }}
+                                                        <li id="cancle"><a class="dropdown-item" href="/api/cancelBooking/{{this._id}}">Cancel 80% Refund</a></li>
+                                                                                            
+                                                    {{/if}}
                                                     <li id="refund"><a class="dropdown-item" href="/api/cancelNoRefund/{{this._id}}">Cancel No Refund</a></li>                                    
                                                 {{/if}}
                                                 <li id="checkIn"><a class="dropdown-item" href="/api/markCheckIn/{{this._id}}">Check In</a></li>

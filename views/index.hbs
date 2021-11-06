@@ -12,34 +12,32 @@
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form" id="roomBooking">
                         <h3>Booking Your Hotel</h3>
-                        <form action="#" id="checkAvailbityForm">
+                        <form action="#" id="checkAvailbityForm" autocomplete="off">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input onchange="dateChanged(event)" type="text" required name="checkInDate" class="date-input" id="checkInDate">
+                                <input autocomplete="off" onchange="dateChanged(event)" type="text" required name="checkInDate" class="date-input" id="checkInDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" required name="checkOutDate" class="date-input" id="checkOutDate">
+                                <input autocomplete="off" type="text" required name="checkOutDate" class="date-input" id="checkOutDate">
                                 <i class="icon_calendar"></i>
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select required name="adultNo" id="guest">
-                                    <option value="1">1 Adults</option>
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                </select>
+                            <br>
+                            <div class="select-option" style="display: flex;">
+                                <label for="guest" class="mr-4">No Of Adults:</label>
+                                <div onclick="decrAdult()" class="mr-4 ml-4" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/minus.png"> </div>
+                                <input style="width: 20%;" required class="form-control" onchange="changeFormAttributes2()" type="number" min="1" value="1" name="adultNo" id="guest">
+                                <div onclick="incrAdult()" class="ml-3" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/plus.png"> </div>
                             </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select required name="roomNo" id="room">
-                                    <option value="1">1 Room</option>
-                                    <option value="2">2 Room</option>
-                                    <option value="3">3 Room</option>
-                                    <option value="4">4 Room</option>
-                                </select>
+
+                            <div class="select-option" style="display: flex;">
+                                <label for="guest" class="mr-4">No Of Rooms:</label>
+                                <div onclick="decrRoom()" class="mr-4 ml-4" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/minus.png"> </div>
+                                <input style="width: 20%;" required class="form-control" onchange="changeFormAttributes2()" type="number" min="1" value="1" name="roomNo" id="room">
+                                <div onclick="incrRoom()" class="ml-3" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/plus.png"> </div>
                             </div>
+                            <br>
                             <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
                         </form>
                     </div>
@@ -349,7 +347,34 @@
 
     <script>
         const checkAvailbityForm = document.getElementById('checkAvailbityForm');
+        checkAvailbityForm.setAttribute( "autocomplete", "off" )
         const roomBooking = document.getElementById('roomBooking');
+
+
+        function incrAdult() {
+            let guest = document.getElementById('guest');
+            guest.value = parseInt(guest.value) + 1;
+        }
+
+        function decrAdult() {
+            let guest = document.getElementById('guest');
+            if(parseInt(guest.value) > 1) {
+                guest.value = parseInt(guest.value) - 1;
+            }
+        }
+
+        function incrRoom() {
+            let room = document.getElementById('room');
+            room.value = parseInt(room.value) + 1;
+        }
+
+        function decrRoom() {
+            let room = document.getElementById('room');
+            if(parseInt(room.value) > 1) {
+                room.value = parseInt(room.value) - 1;
+            }
+        }
+
 
         checkAvailbityForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -371,7 +396,7 @@
                     console.log(data);
                     if (data.message === 'Room is available') {
                         alert('Room is available. \nClick OK to proceed on booking page.');
-                        window.location.href = `/rooms/${roomId}?bool=true&checkIn=${document.getElementById('checkInDate').value}&checkOut=${document.getElementById('checkOutDate').value}`;
+                        window.location.href = `/rooms/${roomId}?bool=true&checkIn=${document.getElementById('checkInDate').value}&checkOut=${document.getElementById('checkOutDate').value}&adultNo=${adultNo}&roomNo=${roomNo}`;
                     } else {
                         alert('Room is Not Available. \nPlease Check for another Date.');
                     }

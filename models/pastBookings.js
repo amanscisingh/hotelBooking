@@ -45,8 +45,6 @@ const pastBookingsSchema = new mongoose.Schema({
     },
     paymentId: {
         type: String,
-        required: true,
-        default: null
     },
     amountPaid: {
         type: Number,

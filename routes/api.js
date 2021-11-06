@@ -89,6 +89,43 @@ apiRoute.post('/booking', async (req, res) => {
 });
 
 
+// route to add free booking ...partiallyBooked
+apiRoute.post('/freeBooking', async (req, res) => {
+    try {
+        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice } = req.query;
+        // change time in 2021-11-17T00:00:00.000Z to 11:00 am
+        let checkIn = new Date(checkInDate);
+        checkIn.setHours(12, 30, 0, 0);
+        let checkOut = new Date(checkOutDate);
+        checkOut.setHours(11, 00, 0, 0);
+
+        const booking = new Bookings({
+            checkIn: checkIn,
+            checkOut: checkOut,
+            roomId: roomId,
+            roomNo: roomNo,
+            adults: adultNo,
+            userName: userName,
+            email: email,
+            mobile: mobile,
+            status: 'partialBooked',
+            noOfRooms: noOfRooms,
+            children: children,
+            totalAmount: totalAmount,
+            amountPaid: 0,
+            breakfastAmount: breakFastPrice
+        });
+        // console.log(booking);
+        const savedBooking = await booking.save();
+        res.status(200).json({
+            message: 'Booking added successfully',
+            data: savedBooking
+        });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 // route for razor pay
 const razorpay = new RazorPay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -166,7 +203,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
             }
         });
 
-        res.render('bookingConfirmed', {data: payment, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status, totalAmount:Math.round(totalAmount*100)/100 });
+        res.render('bookingConfirmed', {data: payment, email:email, mobile:mobile, userName: name, bookingId: bookingId, checkIn: checkIn, checkOut:checkOut, noOfRooms:noOfRooms, amount:payment.amount/100, status:status, totalAmount:Math.round(totalAmount*100)/100 });
         // console.log("Message sent: %s", info.messageId);
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     

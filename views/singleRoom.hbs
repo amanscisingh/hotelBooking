@@ -119,7 +119,7 @@
                 <div class="col-lg-4">
                     <div class="room-booking" id="roomBooking">
                         <h3>Your Reservation</h3>
-                        <form action="#" id="checkAvailbityForm">
+                        <form action="/rooms/bookings/616d0d14cb6f6db1edd2f855" id="checkAvailbityForm" method="get" autocomplete="off">
                             <div class="check-date">
                                 <label for="checkInDate">Check In:</label>
                                 <input type="text" required name="checkInDate" onchange="validateDates()" value="{{checkIn}}" class="date-input" id="checkInDate">
@@ -133,36 +133,29 @@
                                 <input type="text" required name="checkOutDate" onchange="validateDates()" value="{{checkOut}}" class="date-input" id="checkOutDate">
                                 <i class="icon_calendar"></i>
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select name="adultNo" required id="guest" onchange="changeFormAttributes2()">
-                                    <option value="1">1 Adults</option>
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                </select>
+                            <br>
+                            <div class="select-option" style="display: flex;">
+                                <label for="guest" class="mr-4">No Of Adults:</label>
+                                <div onclick="decrAdult()" class="mr-4 ml-4" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/minus.png"> </div>
+                                <input style="width: 20%;" required class="form-control" type="number" min="1" value="{{adultNo}}" name="adultNo" id="guest">
+                                <div onclick="incrAdult()" class="ml-3" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/plus.png"> </div>
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Children:</label>
-                                <select name="children" id="children">
-                                    <option value="0">0 Children</option>
-                                    <option value="1">1 Children</option>
-                                    <option value="2">2 Children</option>
-                                    <option value="3">3 Children</option>
-                                </select>
+                            
+                            <div class="select-option" style="display: flex;">
+                                <label for="guest" class="mr-4">No Of Children:</label>
+                                <div onclick="decrChild()" class="mr-3 ml-4" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/minus.png"> </div>
+                                <input style="width: 20%;" required class="form-control"  type="number" min="0" value="0" name="children" id="children">
+                                <div onclick="incrChild()" class="ml-3" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/plus.png"> </div>
+                            </div>                            
+                            <div class="select-option" style="display: flex;">
+                                <label for="guest" class="mr-4">No Of Rooms:</label>
+                                <div onclick="decrRoom()" class="mr-4 ml-4" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/minus.png"> </div>
+                                <input style="width: 20%;" required class="form-control" type="number" min="1" value="{{roomNo}}" name="roomNo" id="room">
+                                <div onclick="incrRoom()" class="ml-3" style="cursor:pointer;"> <img class="mt-2" src="/img/icon/plus.png"> </div>
                             </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select name="roomNo" required id="room" onchange="changeFormAttributes2()">
-                                    <option selected value="1">1 Room</option>
-                                    <option value="2">2 Room</option>
-                                    <option value="3">3 Room</option>
-                                    <option value="4">4 Room</option>
-                                </select>
-                            </div>
-                            <div id="extraFormAttributes1" class="m-0 p-0"></div>
-                            <div id="extraFormAttributes3" class="m-0 p-0"></div>
-                            <div id="extraFormAttributes2" class="m-0 p-0"></div>
-                            <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
+                            <br>
+                            
+                            <button type="submit" id="checkAvailabilityBtn">Proceed to Booking Page</button>
                         </form>
                     </div>
                 </div>
@@ -184,7 +177,6 @@
         const sellingPrice = parseInt('{{room.sellingPrice}}');
         const bookingCharge = parseInt('{{room.bookingPrice}}');
         const breakFastCharge = parseInt('{{room.breakfastPrice}}');
-        let isBooking = "{{bool}}" === 'true';
 
         let roomNo = document.getElementById('room').value;
 
@@ -209,27 +201,6 @@
             return newDate;
         }
 
-        function changeFormAttributes1() {
-            roomNo = document.getElementById('room').value;
-            extraFormAttributes1.innerHTML = '';
-            let htmlToBeUpdated = ` 
-               <div class="mt-4">
-                    <input required class="form-control" type="text" name="userName" id="userName" placeholder="Name*">
-                </div>
-                <div class="mt-4">
-                    <input required class="form-control" type="text" name="email" id="email" placeholder="Email*">
-                </div>
-                <div class="mt-4">
-                    <input required class="form-control" type="text" name="mobile" id="mobile" placeholder="Mobile No.*">
-                </div>
-                <div class="mt-4">
-                    <input onchange="changeFormAttributes3()" type="checkBox" name="isBreakFast" id="isBreakFast" placeholder="isBreakFast *">
-                    <label for="isBreakFast">Include Breakfast</label>
-                </div>
-            `;
-            extraFormAttributes1.innerHTML = htmlToBeUpdated;
-        }
-
         function validateDates() {
             let checkIn = document.getElementById('checkInDate').value;
             let checkOut = document.getElementById('checkOutDate').value;
@@ -237,191 +208,67 @@
                 alert('Check In Date should be less than Check Out Date');
                 // document.getElementById('checkInDate').value = '';
                 document.getElementById('checkOutDate').value = '';
-            } else if(checkIn !== "" && checkOut !== "") {
-                changeFormAttributes2();
             }
 
             return;
         }
 
-        function changeFormAttributes2() {
-            roomNo = document.getElementById('room').value;
-            let noOfAdults = parseInt(document.getElementById('guest').value);
-            let breakfastNo = document.getElementById('breakfastNo');
-            let checkIn = document.getElementById('checkInDate').value;
-            let checkOut = document.getElementById('checkOutDate').value;
-            let noOfDays = parseInt((new Date(changeDateFormat(checkOut)) - new Date(changeDateFormat(checkIn))) / (1000 * 60 * 60 * 24));
-            let breakFastPrice = breakfastNo != null ? breakFastCharge*breakfastNo.value*noOfAdults : 0;
-            document.getElementById('checkAvailabilityBtn').remove();
-            extraFormAttributes2.innerHTML = '';
-            let htmlToBeUpdated = ` 
-                <p class="f-para mt-4"> Room Cost : ${sellingPrice*roomNo} ₹ /pernight </p> 
-                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /(150 ₹)per breakfast</p>
-                <p class="f-para mt-4"> Total Cost : ${breakFastPrice+sellingPrice*roomNo} ₹ /pernight </p>
-                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Exclusive): ${Math.round((breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12 * 100) / 100} ₹ /pernight </p>
-                <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
-                <button type="submit" id="checkAvailabilityBtn">Pay And Book</button>
-            `;
-            extraFormAttributes2.innerHTML = htmlToBeUpdated;
-        }
 
         let isBreakFast = false;
-        function changeFormAttributes3() {
-            if(isBreakFast) {
-                extraFormAttributes3.innerHTML = '';
-                isBreakFast = false;
-            }
-            else {
-                extraFormAttributes3.innerHTML = '';
-                let htmlToBeUpdated = ` 
-                    <div class="mt-4">
-                        <input required class="form-control" onchange="changeFormAttributes2()" type="number" min="0" name="breakfastNo" id="breakfastNo" placeholder="Number of BreakFast">
-                    </div>
-                `;
-                extraFormAttributes3.innerHTML = htmlToBeUpdated;
-                isBreakFast = true;
-            }
-
+        function incrBF() {
+            let breakfastNo = document.getElementById('breakfastNo');
+            breakfastNo.value = parseInt(breakfastNo.value) + 1;
+            changeFormAttributes2();
         }
 
-    
-        if (isBooking) {
-            changeFormAttributes1();
-            changeFormAttributes2();
-        };
-
-        // document.getElementById('room').addEventListener('change', ()=>{
-        //     console.log(document.getElementById('room').value);
-        //     changeFormAttributes2();
-        // });
-
-
-        checkAvailbityForm.addEventListener('submit', (e) => {
-            document.getElementById('checkAvailabilityBtn').innerHTML = `
-                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                 Loading...
-            `;
-            e.preventDefault();
-            const checkInDate = changeDateFormat(document.getElementById('checkInDate').value);
-            const checkOutDate = changeDateFormat(document.getElementById('checkOutDate').value);
-            const adultNo = document.getElementById('guest').value;
-            roomNo = document.getElementById('room').value;
-            const checkAvailabilityUrl = `/api/rooms/checkAvailability?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}`;
+        function decrBF() {
             let breakfastNo = document.getElementById('breakfastNo');
-            let checkIn = document.getElementById('checkInDate').value;
-            let checkOut = document.getElementById('checkOutDate').value;
-            let noOfDays = parseInt((new Date(changeDateFormat(checkOut)) - new Date(changeDateFormat(checkIn))) / (1000 * 60 * 60 * 24));
-            let breakFastPrice = breakfastNo != null ? breakFastCharge*breakfastNo.value : 0;
-            let totalAmount = (breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12
-            let amountPaid = bookingCharge*roomNo;
-
-            if (isBooking) {
-                let bookingId; let userName; let noOfRooms;
-                fetch(checkAvailabilityUrl)
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        if (data.message === 'Room is available') {                          
-                            alert(`Room is available. \nPress OK to pay the booking charges(Rs. ${bookingCharge*roomNo}) and confirm booking.`);
-                            let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice*noOfDays}`;
-                            fetch(bookingUrl, {
-                                method: 'POST'
-                            })
-                                .then(res => res.json())
-                                .then(data => {
-                                    console.log(data);
-                                    bookingId = data.data._id;
-                                    userName = data.data.userName;
-                                    noOfRooms = data.data.noOfRooms;
-                                    if (data.message === 'Booking added successfully') {
-                                        
-                                        let divEle = document.createElement('div');
-                                        divEle.innerHTML = `
-                                            <h3>Your Reservation</h3>
-                                            <p>Your booking is successful. You will receive a confirmation email shortly.</p>
-                                        `;
-                                        roomBooking.append(divEle);
-                                    }
-                                })
-                                .catch(err => console.log(err));
-
-                            fetch(`/api/order/${amountPaid}`, {
-                                method : 'POST',
-                            })
-                            .then(res => res.json())
-                            .then(info =>{
-                                console.log(info);
-                                console.log(bookingId);
-                                var options = {
-                                    "key": "rzp_live_YJ7NAqFvrxZQBN", // Enter the Key ID generated from the Dashboard
-                                    "name": "Orange Sky Inn",
-                                    "description": "Live Transaction",
-                                    // "image": "https://www.rosalie.in/img/rosalieLogo.png",
-                                    "order_id": info.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                                    "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}&amountPaid=${amountPaid}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice*noOfDays}`,
-                                    "prefill": {
-                                        "name": document.getElementById('userName').value,
-                                        "email": document.getElementById('email').value,
-                                        "contact": document.getElementById('mobile').value
-                                    },
-                                    "notes": {
-                                        "address": "Razorpay Corporate Office"
-                                    },
-                                    "theme": {
-                                        "color": "#3399cc"
-                                    }
-                                };
-                                var rzp1 = new Razorpay(options);
-                                const initiateRazorpay = function(){
-                                    console.log('funnnnnnnnnnn');
-                                    rzp1.open();
-                                };
-                                initiateRazorpay();
-
-                            })
-                        } else {
-                            alert('Room is Not Available. \nPlease Check for another Date or contact sales.');
-                        }
-                        document.getElementById('checkAvailabilityBtn').innerHTML = `
-                            Pay and Book
-                        `;
-                    })
-                    .catch(err => console.log(err));
-                
-            } else {
-                fetch(checkAvailabilityUrl)
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        if (data.message === 'Room is available') {                          
-                            alert('Room is available');
-                            isBooking = true;
-                            changeFormAttributes1();
-                            changeFormAttributes2();
-                        } else {
-                            alert('Room is Not Available. \nPlease Check for another Date.');
-                        }
-                        document.getElementById('checkAvailabilityBtn').innerHTML = `
-                            Pay and Book
-                        `;
-                    })
-                    .catch(err => console.log(err));
+            if(parseInt(breakfastNo.value) > 0) {
+                breakfastNo.value = parseInt(breakfastNo.value) - 1;
+                changeFormAttributes2();
             }
+        }
 
-        });
+        function incrAdult() {
+            let guest = document.getElementById('guest');
+            guest.value = parseInt(guest.value) + 1;
+            changeFormAttributes2();
+        }
 
+        function decrAdult() {
+            let guest = document.getElementById('guest');
+            if(parseInt(guest.value) > 1) {
+                guest.value = parseInt(guest.value) - 1;
+                changeFormAttributes2();
+            }
+        }
+        function incrChild() {
+            let children = document.getElementById('children');
+            children.value = parseInt(children.value) + 1;
+            changeFormAttributes2();
+        }
 
-        // let p = window.location.search;
-        // console.log(p);
-        // if (p.includes('?cin') && p.includes('&cout')) {
-        //     let cin = p.split('?')[1].split("&")[0].split("=")[1];
-        //     let cout = p.split('?')[1].split("&")[1].split("=")[1];
-        //     document.getElementById('checkInDate').value = cin;
-        //     document.getElementById('checkOutDate').value = cout;
-        //     document.getElementById('checkAvailabilityBtn').scrollIntoView({behavior: 'smooth'});
-        //     document.getElementById('checkAvailabilityBtn').click();
-        // }
-        
+        function decrChild() {
+            let children = document.getElementById('children');
+            if(parseInt(children.value) > 0) {
+                children.value = parseInt(children.value) - 1;
+                changeFormAttributes2();
+            }
+        }
+        function incrRoom() {
+            let room = document.getElementById('room');
+            room.value = parseInt(room.value) + 1;
+            changeFormAttributes2();
+        }
+
+        function decrRoom() {
+            let room = document.getElementById('room');
+            if(parseInt(room.value) > 1) {
+                room.value = parseInt(room.value) - 1;
+                changeFormAttributes2();
+            }
+        }
+
 
 
     </script>

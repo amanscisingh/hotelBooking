@@ -78,3 +78,10 @@ Rajbaga Beach
 1.7 km
 Talpona Beach
 3.1 km
+
+kry id  = rzp_test_Cdc5aUYRCpAqBE
+secret = mhibCkAqAIvZMS4jYNVUq1X4
+
+
+id live = rzp_live_YJ7NAqFvrxZQBN
+sce live = j7GRdd41v1R0llzsvARKrQFq

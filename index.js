@@ -35,6 +35,14 @@ function isCancelled(status) {
     }
 }
 
+function notPartiallyBooked(status) {
+    if (status !== 'partialBooked') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function timeElapsedFromNow(dateTime) {
     const now = new Date();
     const timeElapsed = now.getTime() - dateTime.getTime();
@@ -43,7 +51,7 @@ function timeElapsedFromNow(dateTime) {
     return Math.round(timeElapsedInHours);
 }
 
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable, timeElapsedFromNow, isCancelled } }));
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs", helpers: { isCancellable, timeElapsedFromNow, isCancelled, notPartiallyBooked } }));
 app.set("view engine", ".hbs");
 
 app.use(express.static(__dirname + "/public/"));

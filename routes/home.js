@@ -25,9 +25,22 @@ homeRoute.get('/rooms', async (req, res)=> {
 homeRoute.get('/rooms/:id', async (req, res)=> {
     try {
         let room = await Rooms.findById(req.params.id).lean();
-        let { checkIn, checkOut, bool } = req.query;
+        let { checkIn, checkOut, bool, adultNo, roomNo } = req.query;
         console.log(room);
-        res.render('singleRoom', { room: room, checkIn: checkIn, checkOut: checkOut, bool: bool });
+        res.render('singleRoom', { room: room, checkIn: checkIn, checkOut: checkOut, bool: bool, adultNo: adultNo, roomNo: roomNo });
+        // res.send(room);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+homeRoute.get('/rooms/bookings/:id', async (req, res)=> {
+    try {
+        let room = await Rooms.findById(req.params.id).lean();
+        let { checkInDate, checkOutDate, bool, adultNo, roomNo, children } = req.query;
+        console.log(room);
+        res.render('bookingPage', { room: room, checkInDate: checkInDate, checkOutDate: checkOutDate, bool: bool, adultNo: adultNo, roomNo: roomNo, children: children });
         // res.send(room);
     } catch (error) {
         console.log(error);
@@ -88,4 +101,18 @@ homeRoute.get('/checkBookings', async (req, res)=>{
         console.log(error);
     }
 })
+
+
+homeRoute.get('/confirmed/:id', async (req, res) => {
+    try {
+        let bookingId = req.params.id;
+        let booking = await Bookings.findById(bookingId).lean();
+        console.log(booking);
+        res.render('bookingConfirmed', {email:booking.email, mobile:booking.mobile, userName: booking.userName, bookingId: booking._id, checkIn: booking.checkIn, checkOut:booking.checkOut, noOfRooms:booking.noOfRooms, amount:0, status:booking.status, totalAmount: booking.totalAmount });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+})
+
 module.exports = homeRoute;
