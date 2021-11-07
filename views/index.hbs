@@ -20,7 +20,7 @@
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input autocomplete="off" type="text" required name="checkOutDate" class="date-input" id="checkOutDate">
+                                <input autocomplete="off" type="text" onchange="validateDates()" required name="checkOutDate" class="date-input" id="checkOutDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <br>
@@ -350,6 +350,17 @@
         checkAvailbityForm.setAttribute( "autocomplete", "off" )
         const roomBooking = document.getElementById('roomBooking');
 
+        function validateDates() {
+            let checkIn = document.getElementById('checkInDate').value;
+            let checkOut = document.getElementById('checkOutDate').value;
+            if (checkOut !== "" && checkIn > checkOut) {
+                alert('Check In Date should be less than Check Out Date');
+                // document.getElementById('checkInDate').value = '';
+                document.getElementById('checkOutDate').value = '';
+            }
+
+            return;
+        }
 
         function incrAdult() {
             let guest = document.getElementById('guest');
