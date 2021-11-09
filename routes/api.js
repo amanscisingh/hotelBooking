@@ -73,7 +73,7 @@ apiRoute.post('/booking', async (req, res) => {
             status: 'partialBooked',
             noOfRooms: noOfRooms,
             children: children,
-            totalAmount: totalAmount,
+            totalAmount: (totalAmount*100)/100,
             amountPaid: 0,
             breakfastAmount: breakFastPrice
         });
@@ -111,7 +111,7 @@ apiRoute.post('/freeBooking', async (req, res) => {
             status: 'partialBooked',
             noOfRooms: noOfRooms,
             children: children,
-            totalAmount: totalAmount,
+            totalAmount: (totalAmount*100)/100,
             amountPaid: 0,
             breakfastAmount: breakFastPrice
         });
@@ -177,7 +177,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
         //     data: payment
         // });
 
-        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, Math.round(totalAmount*100)/100);
+        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, Math.round(totalAmount*100)/100, booking.breakfastAmount);
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',

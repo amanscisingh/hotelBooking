@@ -167,9 +167,9 @@
             extraFormAttributes2.innerHTML = '';
             let htmlToBeUpdated = ` 
                 <p class="f-para mt-4"> Room Cost : ${sellingPrice*roomNo} ₹ /pernight </p> 
-                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /(150 ₹)per breakfast</p>
+                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /(${breakFastCharge} ₹)per breakfast</p>
                 <p class="f-para mt-4"> Total Cost : ${breakFastPrice+sellingPrice*roomNo} ₹ /pernight </p>
-                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Exclusive): ${Math.round((breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12 * 100) / 100} ₹ /pernight </p>
+                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Inclusive): ${Math.round((breakFastPrice + sellingPrice*roomNo*noOfDays)*1.12 * 100) / 100} ₹ /pernight </p>
                 <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
                 <button type="submit" id="checkAvailabilityBtn" onclick="changeBookingStatus(true)">Pay Now & Confirm Booking</button>
                 <p>*Booking Confirmation Guaranteed</p>
@@ -278,7 +278,7 @@
             let checkOut = document.getElementById('checkOutDate').value;
             let noOfDays = parseInt((new Date(changeDateFormat(checkOut)) - new Date(changeDateFormat(checkIn))) / (1000 * 60 * 60 * 24));
             let breakFastPrice = breakfastNo != null ? breakFastCharge*breakfastNo.value : 0;
-            let totalAmount = (breakFastPrice+sellingPrice*roomNo)*noOfDays*1.12
+            let totalAmount = Math.round((breakFastPrice + sellingPrice*roomNo*noOfDays)*1.12 * 100) / 100
             let amountPaid = bookingCharge*roomNo;
             if (isPaid) {
                 document.getElementById('checkAvailabilityBtn').innerHTML = `
@@ -295,7 +295,7 @@
                             console.log(data);
                             if (data.message === 'Room is available') {                          
                                 alert(`Room is available. \nPress OK to pay the booking charges(Rs. ${bookingCharge*roomNo}) and confirm booking.`);
-                                let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice*noOfDays}`;
+                                let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}`;
                                 fetch(bookingUrl, {
                                     method: 'POST'
                                 })
@@ -330,7 +330,7 @@
                                         "description": "Live Transaction",
                                         // "image": "https://www.rosalie.in/img/rosalieLogo.png",
                                         "order_id": info.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                                        "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}&amountPaid=${amountPaid}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice*noOfDays}`,
+                                        "callback_url": `/api/payments/callback/?bookingId=${bookingId}&name=${userName}&checkIn=${new Date(checkInDate)}&checkOut=${new Date(checkOutDate)}&noOfRooms=${noOfRooms}&amountPaid=${amountPaid}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}`,
                                         "prefill": {
                                             "name": document.getElementById('userName').value,
                                             "email": document.getElementById('email').value,
@@ -383,7 +383,7 @@
                 }
             } else {
                 // is paid false... simply add the booking with status partiallyBooked
-                let freeBookingUrl = `/api/freeBooking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice*noOfDays}`;
+                let freeBookingUrl = `/api/freeBooking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}`;
                 fetch(freeBookingUrl, {
                     method: 'POST'
                 })

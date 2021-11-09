@@ -1,4 +1,4 @@
-function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfRooms, amount, totalAmount) {
+function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfRooms, amount, totalAmount, breakfastAmount) {
     return `<!DOCTYPE html>
     <html>
     
@@ -159,7 +159,7 @@ function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfR
                                             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                                 <tr>
                                                     <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> TOTAL TO BE PAID </td>
-                                                    <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ${totalAmount} ₹ </td>
+                                                    <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ${totalAmount} (including${breakfastAmount}₹ breakfastAmount) ₹ </td>
                                                 </tr>
                                                 <tr>
                                                     <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> AMOUNT PAID </td>
