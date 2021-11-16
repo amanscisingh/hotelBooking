@@ -53,7 +53,7 @@ apiRoute.get('/rooms/checkAvailability', async (req, res) => {
 // route to add a booking
 apiRoute.post('/booking', async (req, res) => {
     try {
-        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice } = req.query;
+        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice, noOfBreakfast, extraBedCharges } = req.query;
         // change time in 2021-11-17T00:00:00.000Z to 11:00 am
         let checkIn = new Date(checkInDate);
         checkIn.setHours(12, 30, 0, 0);
@@ -75,7 +75,9 @@ apiRoute.post('/booking', async (req, res) => {
             children: children,
             totalAmount: (totalAmount*100)/100,
             amountPaid: 0,
-            breakfastAmount: breakFastPrice
+            breakfastAmount: breakFastPrice,
+            noOfBreakfast: noOfBreakfast,
+            extraBedCharges: extraBedCharges
         });
         // console.log(booking);
         const savedBooking = await booking.save();
@@ -92,7 +94,7 @@ apiRoute.post('/booking', async (req, res) => {
 // route to add free booking ...partiallyBooked
 apiRoute.post('/freeBooking', async (req, res) => {
     try {
-        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice } = req.query;
+        const { checkInDate, checkOutDate, roomId, roomNo, adultNo, userName, email, mobile, noOfRooms, children, totalAmount, breakFastPrice, noOfBreakfast, extraBedCharges } = req.query;
         // change time in 2021-11-17T00:00:00.000Z to 11:00 am
         let checkIn = new Date(checkInDate);
         checkIn.setHours(12, 30, 0, 0);
@@ -113,7 +115,9 @@ apiRoute.post('/freeBooking', async (req, res) => {
             children: children,
             totalAmount: (totalAmount*100)/100,
             amountPaid: 0,
-            breakfastAmount: breakFastPrice
+            breakfastAmount: breakFastPrice,
+            noOfBreakfast: noOfBreakfast,
+            extraBedCharges: extraBedCharges
         });
         // console.log(booking);
         const savedBooking = await booking.save();
@@ -177,7 +181,7 @@ apiRoute.post('/payments/callback', async (req, res) => {
         //     data: payment
         // });
 
-        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, Math.round(totalAmount*100)/100, booking.breakfastAmount);
+        let htmlNew = bookedMail( bookingId, name, payment.email, payment.contact, checkIn, checkOut, noOfRooms, amountPaid, Math.round(totalAmount*100)/100, booking.breakfastAmount, booking.noOfBreakfast, booking.extraBedCharges);
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -310,6 +314,8 @@ apiRoute.get('/deleteBooking/:id', async (req, res) => {
                 totalAmount: booking.totalAmount,
                 amountPaid: booking.amountPaid,
                 breakfastPrice: booking.breakfastPrice,
+                noOfBreakfast: booking.noOfBreakfast,
+                extraBedCharges: booking.extraBedCharges
             });
             const savedPastBooking = await PastBooking.save();
             console.log(savedPastBooking);

@@ -89,6 +89,7 @@
         const sellingPrice = parseInt('{{room.sellingPrice}}');
         const bookingCharge = parseInt('{{room.bookingPrice}}');
         const breakFastCharge = parseInt('{{room.breakfastPrice}}');
+        const extraBedCost = parseInt('{{room.extraBedPrice}}');
         let isBooking = true;
 
         let roomNo = document.getElementById('room').value;
@@ -158,6 +159,7 @@
         function changeFormAttributes2() {
             roomNo = document.getElementById('room').value;
             let noOfAdults = parseInt(document.getElementById('guest').value);
+            let extraBedCharge = noOfAdults <= roomNo*2 ? 0 : extraBedCost;
             let breakfastNo = document.getElementById('breakfastNo');
             let checkIn = document.getElementById('checkInDate').value;
             let checkOut = document.getElementById('checkOutDate').value;
@@ -167,9 +169,10 @@
             extraFormAttributes2.innerHTML = '';
             let htmlToBeUpdated = ` 
                 <p class="f-para mt-4"> Room Cost : ${sellingPrice*roomNo} ₹ /pernight </p> 
-                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice} ₹ /(${breakFastCharge} ₹)per breakfast</p>
-                <p class="f-para mt-4"> Total Cost : ${breakFastPrice+sellingPrice*roomNo} ₹ /pernight </p>
-                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Inclusive): ${Math.round((breakFastPrice + sellingPrice*roomNo*noOfDays)*1.12 * 100) / 100} ₹ /pernight </p>
+                <p class="f-para mt-4"> Extra Bed Cost : ${extraBedCharge} ₹ /pernight </p> 
+                <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice*noOfDays} ₹ /(${breakFastCharge} ₹)per breakfast | calculating for ${noOfDays} days</p>
+                <p class="f-para mt-4"> Total Cost : ${breakFastPrice*noOfDays+sellingPrice*roomNo} ₹ /pernight </p>
+                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Inclusive): ${Math.round((breakFastPrice*noOfDays*1.05 + sellingPrice*roomNo*noOfDays*1.12) * 100) / 100} ₹ /pernight </p>
                 <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
                 <button type="submit" id="checkAvailabilityBtn" onclick="changeBookingStatus(true)">Pay Now & Confirm Booking</button>
                 <p>*Booking Confirmation Guaranteed</p>
@@ -280,6 +283,7 @@
             let breakFastPrice = breakfastNo != null ? breakFastCharge*breakfastNo.value : 0;
             let totalAmount = Math.round((breakFastPrice + sellingPrice*roomNo*noOfDays)*1.12 * 100) / 100
             let amountPaid = bookingCharge*roomNo;
+            let extraBedCharge = adultNo <= roomNo*2 ? 0 : extraBedCost;
             if (isPaid) {
                 document.getElementById('checkAvailabilityBtn').innerHTML = `
                     <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
@@ -295,7 +299,7 @@
                             console.log(data);
                             if (data.message === 'Room is available') {                          
                                 alert(`Room is available. \nPress OK to pay the booking charges(Rs. ${bookingCharge*roomNo}) and confirm booking.`);
-                                let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}`;
+                                let bookingUrl = `/api/booking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}&noOfBreakfast=${breakfastNo.value}&extraBedCharges=${extraBedCharge}`;
                                 fetch(bookingUrl, {
                                     method: 'POST'
                                 })
@@ -383,7 +387,7 @@
                 }
             } else {
                 // is paid false... simply add the booking with status partiallyBooked
-                let freeBookingUrl = `/api/freeBooking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}`;
+                let freeBookingUrl = `/api/freeBooking?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adultNo=${adultNo}&roomNo=${roomNo}&roomId=${roomId}&userName=${document.getElementById('userName').value}&email=${document.getElementById('email').value}&mobile=${document.getElementById('mobile').value}&noOfRooms=${document.getElementById('room').value}&children=${document.getElementById('children').value}&totalAmount=${totalAmount}&breakFastPrice=${breakFastPrice}&noOfBreakfast=${breakfastNo.value}&extraBedCharges=${extraBedCharge}`;
                 fetch(freeBookingUrl, {
                     method: 'POST'
                 })

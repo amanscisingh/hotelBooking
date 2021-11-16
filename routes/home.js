@@ -111,7 +111,7 @@ homeRoute.get('/confirmed/:id', async (req, res) => {
         let bookingId = req.params.id;
         let booking = await Bookings.findById(bookingId).lean();
         console.log(booking);
-        let htmlNew = bookedMail( booking._id, booking.userName, booking.email, booking.mobile, booking.checkIn, booking.checkOut, booking.noOfRooms, booking.amountPaid, (booking.totalAmount*100)/100, booking.breakfastAmount);
+        let htmlNew = bookedMail( booking._id, booking.userName, booking.email, booking.mobile, booking.checkIn, booking.checkOut, booking.noOfRooms, booking.amountPaid, (booking.totalAmount*100)/100, booking.breakfastAmount, booking.noOfBreakfast, booking.extraBedCharges);
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -137,7 +137,7 @@ homeRoute.get('/confirmed/:id', async (req, res) => {
             }
         });
 
-        res.render('bookingConfirmed', {email:booking.email, mobile:booking.mobile, userName: booking.userName, bookingId: booking._id, checkIn: booking.checkIn, checkOut:booking.checkOut, noOfRooms:booking.noOfRooms, amount:0, status:booking.status, totalAmount: (booking.totalAmount*100)/100, breakfastAmount: booking.breakfastAmount });
+        res.render('bookingConfirmed', {noOfBreakfast:booking.noOfBreakfast, extraBedCharges: booking.extraBedCharges , email:booking.email, mobile:booking.mobile, userName: booking.userName, bookingId: booking._id, checkIn: booking.checkIn, checkOut:booking.checkOut, noOfRooms:booking.noOfRooms, amount:0, status:booking.status, totalAmount: (booking.totalAmount*100)/100, breakfastAmount: booking.breakfastAmount });
     } catch (error) {
         console.log(error);
         res.redirect('/');

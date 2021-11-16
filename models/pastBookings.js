@@ -53,9 +53,17 @@ const pastBookingsSchema = new mongoose.Schema({
     breakfastAmount: {
         type: Number
     },
+    noOfBreakfast: {
+        type: Number,
+        default: 0
+    },
     totalAmount: {
         type: Number,
         // required: true
+    },
+    extraBedCharges: {
+        type: Number,
+        default: 0
     },
 }, {
     timestamps: true

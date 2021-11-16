@@ -33,6 +33,10 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    extraBedPrice: {
+        type: Number,
+        required: true
+    },
 }, {
     timestamps: true
 });
