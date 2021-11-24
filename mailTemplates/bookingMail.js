@@ -1,4 +1,4 @@
-function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfRooms, amount, totalAmount, breakfastAmount) {
+function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfRooms, amount, totalAmount, breakfastAmount, noOfBreakfast, extraBedCharges) {
     return `<!DOCTYPE html>
     <html>
     
@@ -150,6 +150,14 @@ function bookedMail(bookingId, fullName, email, mobile, checkIn, checkOut, noOfR
                                                 <tr>
                                                     <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> No. Of Rooms </td>
                                                     <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> ${noOfRooms} </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Break Fast </td>
+                                                    <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> ${noOfBreakfast} for (${breakfastAmount} ₹) </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Extra Bed Charges </td>
+                                                    <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> ${extraBedCharges} </td>
                                                 </tr>
                                             </table>
                                         </td>

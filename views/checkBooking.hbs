@@ -30,7 +30,7 @@
                             <th class="th-sm">No Of Rooms</th>
                             <th class="th-sm">CheckIn</th>
                             <th class="th-sm">CheckOut</th>
-                            <th class="th-sm">Breakfast Amount</th>
+                            <th class="th-sm">Breakfast Details</th>
                             <th class="th-sm">Total Amount</th>
                             <th class="th-sm">Paid Amount</th>
                             <th class="th-sm">Time Since Booking (Hours)</th>
@@ -48,9 +48,9 @@
                                 <td>{{this.noOfRooms}}</td>
                                 <td>{{this.checkIn}}</td>
                                 <td>{{this.checkOut}}</td>
-                                <td>{{this.breakfastAmount}}</td>
+                                <td>{{this.breakfastAmount}} ₹ | {{this.noOfBreakfast}}</td>
                                 <td>{{this.totalAmount}}</td>
-                                <td>{{this.amountPaid}}</td>
+                                <td>{{this.amountPaid}} ₹ | (Extra Bed: {{this.extraBedCharges}})</td>
                                 <td>{{timeElapsedFromNow this.updatedAt}}</td>
                                 <td>{{this.status}}</td>
                 
