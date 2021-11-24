@@ -136,9 +136,9 @@
         }
 
         function validateDates() {
-            let checkIn = document.getElementById('checkInDate').value;
-            let checkOut = document.getElementById('checkOutDate').value;
-            if (checkOut !== "" && checkIn > checkOut) {
+            let checkIn = new Date(document.getElementById('checkInDate').value);
+            let checkOut = new Date(document.getElementById('checkOutDate').value);
+            if (checkOut !== "" && checkIn.getTime() > checkOut.getTime()) {
                 alert('Check In Date should be less than Check Out Date');
                 // document.getElementById('checkInDate').value = '';
                 document.getElementById('checkOutDate').value = '';
