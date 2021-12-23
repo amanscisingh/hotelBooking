@@ -171,8 +171,8 @@
                 <p class="f-para mt-4"> Room Cost : ${sellingPrice*roomNo} ₹ /pernight </p> 
                 <p class="f-para mt-4"> Extra Bed Cost : ${extraBedCharge} ₹ /pernight </p> 
                 <p class="f-para mt-4"> BreakFast Cost : ${breakFastPrice*noOfDays} ₹ /(${breakFastCharge} ₹)per breakfast | calculating for ${noOfDays} days</p>
-                <p class="f-para mt-4"> Total Cost : ${breakFastPrice*noOfDays+sellingPrice*roomNo} ₹ /pernight </p>
-                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Inclusive): ${Math.round((breakFastPrice*noOfDays*1.05 + sellingPrice*roomNo*noOfDays*1.12) * 100) / 100} ₹ /pernight </p>
+                <p class="f-para mt-4"> Total Cost : ${breakFastPrice*noOfDays+sellingPrice*roomNo+extraBedCharge} ₹ /pernight </p>
+                <p class="f-para mt-4"> Grand Total for ${noOfDays} Days (Tax Inclusive): ${Math.round((breakFastPrice*noOfDays*1.05 + (sellingPrice*roomNo+extraBedCharge)*noOfDays*1.12) * 100) / 100} ₹ /pernight </p>
                 <p class="f-para"> Booking Charge (Pay Now ${bookingCharge} per room): ${bookingCharge*roomNo} </p>
                 <button type="submit" id="checkAvailabilityBtn" onclick="changeBookingStatus(true)">Pay Now & Confirm Booking</button>
                 <p>*Booking Confirmation Guaranteed</p>
